@@ -2,6 +2,7 @@ package mock
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 	"time"
 
@@ -29,7 +30,7 @@ func (m *Mock) GetUser(usr model.User) (model.User, error) {
 			return u, nil
 		}
 	}
-	return model.User{}, errors.New("Requested User not found")
+	return model.User{}, fmt.Errorf("Requested User %#v not found", usr)
 }
 
 // CreateUser adds a user to the users array without erroring
@@ -43,6 +44,8 @@ func (m *Mock) CreateUser(usr model.User) (model.User, error) {
 	return m.users[len(m.users)-1], nil
 }
 
+// ValidateUserCreds compares the given passwod with the one
+// stored in m.users for a given user
 func (m *Mock) ValidateUserCreds(username, password string) error {
 	usr, err := m.GetUser(model.User{Username: username})
 	if err != nil {
@@ -55,6 +58,7 @@ func (m *Mock) ValidateUserCreds(username, password string) error {
 	return nil
 }
 
+// GetProfile returns public data
 func (m *Mock) GetProfile(username string) (model.Profile, error) {
 	for _, u := range m.users {
 		if strings.ToLower(u.Username) == strings.ToLower(username) {
@@ -71,12 +75,14 @@ func (m *Mock) GetProfile(username string) (model.Profile, error) {
 	return model.Profile{}, errors.New("Requested Profile not found")
 }
 
+// CreatePost adds a post to m.users
 func (m *Mock) CreatePost(p model.Post) (model.Post, error) {
 	p.CreatedAt = time.Now()
 	m.posts = append(m.posts, p)
 	return m.posts[len(m.posts)-1], nil
 }
 
+// GetUserSettings returns settings for a user
 func (m *Mock) GetUserSettings(username string) (model.Settings, error) {
 	usr, err := m.GetUser(model.User{Username: username})
 	if err != nil {
@@ -84,7 +90,7 @@ func (m *Mock) GetUserSettings(username string) (model.Settings, error) {
 	}
 
 	return model.Settings{
-		Username: usr.FirstName, LastName: usr.LastName, Email: usr.Email,
+		Username: usr.Username, FirstName: usr.FirstName, LastName: usr.LastName, Email: usr.Email,
 	}, nil
 }
 
