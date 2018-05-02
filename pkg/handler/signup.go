@@ -10,19 +10,22 @@ import (
 
 // Signup creates user in storage, and responds with auth token
 func (h *handler) SignUp(w http.ResponseWriter, r *http.Request) {
-	var usr model.User
+	errMsg := `Request Body must be in the format: {"username": "jl", "firstName": "John", "lastName": "lennon", "email" "strawberry@fields.com", "password": "berrystraw123"}`
+	usrPwd := &struct {
+		model.User
+		Password string `json:""`
+	}{}
 
 	defer r.Body.Close()
-	err := json.NewDecoder(r.Body).Decode(&usr)
+	err := json.NewDecoder(r.Body).Decode(usrPwd)
 	if err != nil {
-		http.Error(w,
-			`Request Body must be in the format: {"username": "jl", "firstName": "John", "lastName": "lennon", "email" "strawberry@fields.com", "password": "berrystraw123"}`,
-			http.StatusBadRequest)
+		http.Error(w, errMsg, http.StatusBadRequest)
 		return
 	}
 
+	usr := usrPwd.User
 	if err := usr.Validate(); err != nil {
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		http.Error(w, errMsg, http.StatusBadRequest)
 		return
 	}
 
@@ -33,7 +36,7 @@ func (h *handler) SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newUsr, err := h.store.CreateUser(usr)
+	newUsr, err := h.store.CreateUser(usr, usrPwd.Password)
 	if err != nil {
 		serverError(w, err)
 		return

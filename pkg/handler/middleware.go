@@ -38,7 +38,7 @@ func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 		if claims.Username == "" {
-			http.Error(w, "Invalid auth token", http.StatusUnauthorized)	
+			http.Error(w, "Invalid auth token", http.StatusUnauthorized)
 			return
 		}
 		ctx := context.WithValue(r.Context(), ctxUsnKey, claims.Username)
@@ -47,13 +47,13 @@ func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 }
 
 // LogMiddleware logs request proto, method, url, headers, and body
-func LogMiddleware(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
+func LogMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var buf bytes.Buffer
 		tee := io.TeeReader(r.Body, &buf)
 		r.Body = ioutil.NopCloser(&buf)
 		reqBody, _ := ioutil.ReadAll(tee)
 		log.Printf("%s - %s - %s - %s - %s ", r.Proto, r.Method, r.URL, r.Header, reqBody)
 		next.ServeHTTP(w, r)
-	}
+	})
 }

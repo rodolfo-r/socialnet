@@ -41,7 +41,11 @@ func New(store storage.Storage, options Options) *mux.Router {
 	}
 
 	for _, r := range routes {
-		router.Methods(r.method).Path(r.path).HandlerFunc(r.handler)
+		router.HandleFunc(r.path, r.handler).Methods(r.method)
+	}
+
+	if options.Log {
+		router.Use(LogMiddleware)
 	}
 
 	signature = options.Signature

@@ -1,12 +1,11 @@
 package postgres
 
 import (
-	"log"
 	"time"
 
 	"github.com/jmoiron/sqlx"
 	uuid "github.com/satori/go.uuid"
-	"github.com/techmexdev/reddit-api/pkg/model"
+	"github.com/techmexdev/the_social_network/pkg/model"
 )
 
 // Postgres is an implementation of Storage
@@ -16,36 +15,27 @@ type Postgres struct {
 
 // New returns a pointer to a pg connection
 func New(dsn string) *Postgres {
-	p := &Postgres{sqlx.MustConnect("postgres", dsn)}
-	err := p.init()
-	if err != nil {
-		log.Fatal(err)
-	}
-	return p
-}
-
-func (p *Postgres) init() error {
-
+	return &Postgres{sqlx.MustConnect("postgres", dsn)}
 }
 
 // InsertUser Inserts new user into users table.
-func (p *Postgres) CreateUser(model.User) (model.User, error) {
+func (db *Postgres) CreateUser(usr model.User, password string) (model.User, error) {
 	q := "INSERT INTO users (id, username, email, password, created_at, updated_at)" +
 		" VALUES ($1, $2, $3, $4, $5, $6)"
 
 	id, err := uuid.NewV4()
 	if err != nil {
-		return err
+		return model.User{}, err
 	}
 
 	createdAt := time.Now().Format(time.RFC3339)
 
-	_, err = db.Exec(q, id, usr.Username, usr.Email, pwd, createdAt, createdAt)
+	_, err = db.Exec(q, id, usr.Username, usr.Email, password, createdAt, createdAt)
 	if err != nil {
-		return err
+		return model.User{}, err
 	}
 
-	return nil
+	return usr, nil
 }
 
 // Get User retrieves a username

@@ -11,9 +11,14 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+type usrPwd struct {
+	model.User
+	pwd string
+}
+
 // Mock is a mock storage
 type Mock struct {
-	users []model.User
+	users []usrPwd
 	posts []model.Post
 }
 
@@ -27,31 +32,36 @@ func (m *Mock) GetUser(usr model.User) (model.User, error) {
 	for _, u := range m.users {
 		if strings.ToLower(u.Email) == strings.ToLower(usr.Email) ||
 			strings.ToLower(u.Username) == strings.ToLower(usr.Username) {
-			return u, nil
+			return u.User, nil
 		}
 	}
 	return model.User{}, fmt.Errorf("Requested User %#v not found", usr)
 }
 
 // CreateUser adds a user to the users array without erroring
-func (m *Mock) CreateUser(usr model.User) (model.User, error) {
-	b, err := bcrypt.GenerateFromPassword([]byte(usr.Password), 12)
+func (m *Mock) CreateUser(usr model.User, pwd string) (model.User, error) {
+	b, err := bcrypt.GenerateFromPassword([]byte(pwd), 12)
 	if err != nil {
 		return model.User{}, err
 	}
-	usr.Password = string(b)
-	m.users = append(m.users, usr)
-	return m.users[len(m.users)-1], nil
+	m.users = append(m.users, usrPwd{User: usr, pwd: string(b)})
+	return m.users[len(m.users)-1].User, nil
 }
 
 // ValidateUserCreds compares the given passwod with the one
 // stored in m.users for a given user
 func (m *Mock) ValidateUserCreds(username, password string) error {
-	usr, err := m.GetUser(model.User{Username: username})
-	if err != nil {
-		return err
+	if len(username) == 0 || len(password) == 0 {
+		return errors.New("username and password cannot be blank")
 	}
-	err = bcrypt.CompareHashAndPassword([]byte(usr.Password), []byte(password))
+
+	var storedPwd string
+	for _, u := range m.users {
+		if u.User.Username == username {
+			storedPwd = u.pwd
+		}
+	}
+	err := bcrypt.CompareHashAndPassword([]byte(storedPwd), []byte(password))
 	if err != nil {
 		return err
 	}

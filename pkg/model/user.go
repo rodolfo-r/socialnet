@@ -7,11 +7,10 @@ type User struct {
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`
 	Email     string `json:"email"`
-	Password  string `json:"password"`
 }
 
 func (u *User) Validate() error {
-	fields := []string{u.FirstName, u.LastName, u.Email, u.Username, u.Password}
+	fields := []string{u.FirstName, u.LastName, u.Email, u.Username,}
 	emptyField := false
 	emptyMsg := "user contains empty fields: "
 
@@ -28,4 +27,3 @@ func (u *User) Validate() error {
 
 	return nil
 }
-

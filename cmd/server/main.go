@@ -12,6 +12,7 @@ import (
 func main() {
 	addr := os.Getenv("ADDRESS")
 	sign := os.Getenv("JWT_SIGNATURE")
+
 	if len(addr) == 0 || len(sign) == 0 {
 		log.Fatal("ADDRESS and JWT_SIGNATURE env vars must be set")
 	}
