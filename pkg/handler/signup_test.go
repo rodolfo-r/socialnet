@@ -9,13 +9,23 @@ import (
 	"testing"
 
 	"github.com/techmexdev/handlertest"
-	"github.com/techmexdev/the_social_network/pkg/handler"
-	"github.com/techmexdev/the_social_network/pkg/storage/mock"
+	"github.com/techmexdev/socialnet"
+	"github.com/techmexdev/socialnet/pkg/auth"
+	"github.com/techmexdev/socialnet/pkg/storage/memo"
+	"github.com/techmexdev/socialnet/pkg/handler"
 )
 
 func TestSignUp(t *testing.T) {
 	t.Parallel()
-	router := handler.New(mock.New(), handler.Options{})
+
+	usrStore := memo.NewUserStorage()
+	usrSvc := socialnet.UserService{Store: usrStore, Auth: *auth.New(usrStore)}
+	postSvc := socialnet.PostService{Store: memo.NewPostStorage()}
+
+	router := handler.New(usrSvc, postSvc, handler.Options{
+		Signature: "jwt test signature",
+	})
+
 	tcs := []handlertest.TestCase{
 		{
 			Name:       "New User",

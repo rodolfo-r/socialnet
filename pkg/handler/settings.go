@@ -2,16 +2,21 @@ package handler
 
 import (
 	"net/http"
+
+	"github.com/techmexdev/socialnet"
 )
 
 func (h *handler) Settings(w http.ResponseWriter, r *http.Request) {
-	usn := r.Context().Value(ctxUsnKey).(string)
-	settings, err := h.store.GetUserSettings(usn)
+	un := r.Context().Value(ctxUsnKey).(string)
+	usr, err := h.userSvc.Store.Read(un)
+
+	set := &socialnet.Settings{
+		Username: usr.Username, FirstName: usr.FirstName, LastName: usr.LastName, Email: usr.Email,
+	}
 	if err != nil {
 		serverError(w, err)
 		return
 	}
 
-	writeJSON(w, settings, 200)
-
+	writeJSON(w, set, 200)
 }

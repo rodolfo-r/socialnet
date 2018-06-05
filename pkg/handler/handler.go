@@ -5,7 +5,7 @@ import (
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"
-	"github.com/techmexdev/the_social_network/pkg/storage"
+	"github.com/techmexdev/socialnet"
 )
 
 // Options is configuration for the router
@@ -22,16 +22,18 @@ type route struct {
 }
 
 type handler struct {
-	store storage.Storage
+	userSvc socialnet.UserService
+	postSvc socialnet.PostService
 }
 
 var signature string
 var address string
 
 // New creates a router with all handlers
-func New(store storage.Storage, options Options) *mux.Router {
+func New(userSvc socialnet.UserService, postSvc socialnet.PostService, options Options) *mux.Router {
 	router := mux.NewRouter()
-	h := handler{store}
+	h := handler{userSvc: userSvc, postSvc: postSvc}
+
 	routes := []route{
 		{method: "POST", path: "/signup", handler: h.SignUp},
 		{method: "POST", path: "/login", handler: h.Login},

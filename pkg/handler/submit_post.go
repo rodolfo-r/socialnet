@@ -4,26 +4,28 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/techmexdev/the_social_network/pkg/model"
+	"time"
+
+	"github.com/techmexdev/socialnet"
 )
 
 func (h *handler) SubmitPost(w http.ResponseWriter, r *http.Request) {
 	un := r.Context().Value(ctxUsnKey).(string)
-	cpt := struct {
-		Value string `json:"caption"`
-	}{}
+	var post socialnet.Post
 
 	defer r.Body.Close()
-	err := json.NewDecoder(r.Body).Decode(&cpt)
+	err := json.NewDecoder(r.Body).Decode(&post)
 	if err != nil {
-		http.Error(w, `Request body must be in the form: {"caption": "I am the Walrus!"`, http.StatusBadRequest)
+		http.Error(w, `Request body must be in the form: 
+		{"title": "I am the Walrus!",
+		"body": "I am he as you are he as you are me, and we are all together ♫"}`, http.StatusBadRequest)
 		return
 	}
 
-	post := model.Post{
-		Username: un, Caption: cpt.Value,
-	}
-	createdPost, err := h.store.CreatePost(post)
+	post.CreatedAt = time.Now()
+	post.Author = un
+
+	createdPost, err := h.postSvc.Store.Create(post)
 	if err != nil {
 		serverError(w, err)
 		return

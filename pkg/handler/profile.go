@@ -4,14 +4,19 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/techmexdev/socialnet"
 )
 
 func (h *handler) Profile(w http.ResponseWriter, r *http.Request) {
 	un := mux.Vars(r)["username"]
-	p, err := h.store.GetProfile(un)
+	usr, err := h.userSvc.Store.Read(un)
+
+	prof := &socialnet.Profile{
+		Username: usr.Username, FirstName: usr.FirstName, LastName: usr.LastName, Posts: usr.Posts,
+	}
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 		return
 	}
-	writeJSON(w, p, http.StatusOK)
+	writeJSON(w, prof, http.StatusOK)
 }

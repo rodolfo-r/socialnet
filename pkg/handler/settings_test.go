@@ -9,13 +9,23 @@ import (
 	"testing"
 
 	"github.com/techmexdev/handlertest"
-	"github.com/techmexdev/the_social_network/pkg/handler"
-	"github.com/techmexdev/the_social_network/pkg/storage/mock"
+	"github.com/techmexdev/socialnet"
+	"github.com/techmexdev/socialnet/pkg/auth"
+	"github.com/techmexdev/socialnet/pkg/handler"
+	"github.com/techmexdev/socialnet/pkg/storage/memo"
 )
 
 func TestSettingsInvalidCreds(t *testing.T) {
 	t.Parallel()
-	r := handler.New(mock.New(), handler.Options{})
+
+	usrStore := memo.NewUserStorage()
+	usrSvc := socialnet.UserService{Store: usrStore, Auth: *auth.New(usrStore)}
+	postSvc := socialnet.PostService{Store: memo.NewPostStorage()}
+
+	router := handler.New(usrSvc, postSvc, handler.Options{
+		Signature: "jwt test signature",
+	})
+
 	tcs := []handlertest.TestCase{
 		{
 			Name:       "No credentials",
@@ -37,15 +47,21 @@ func TestSettingsInvalidCreds(t *testing.T) {
 	}
 	for i, _ := range tcs {
 		t.Run(tcs[i].Name, func(t *testing.T) {
-			handlertest.Test(t, tcs[i], r)
+			handlertest.Test(t, tcs[i], router)
 		})
 	}
 }
 
 func TestSettingsValidCreds(t *testing.T) {
-	r := handler.New(mock.New(), handler.Options{})
+	usrStore := memo.NewUserStorage()
+	usrSvc := socialnet.UserService{Store: usrStore, Auth: *auth.New(usrStore)}
+	postSvc := socialnet.PostService{Store: memo.NewPostStorage()}
 
-	token, err := getAuthToken(r)
+	router := handler.New(usrSvc, postSvc, handler.Options{
+		Signature: "jwt test signature",
+	})
+
+	token, err := getAuthToken(router)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -68,7 +84,7 @@ func TestSettingsValidCreds(t *testing.T) {
 
 	for i, _ := range tcs {
 		t.Run(tcs[i].Name, func(t *testing.T) {
-			handlertest.Test(t, tcs[i], r)
+			handlertest.Test(t, tcs[i], router)
 		})
 	}
 }
