@@ -1,21 +1,33 @@
-package memo_test
+package postgres_test
 
 import (
 	"testing"
 
+	_ "github.com/golang-migrate/migrate/source/file"
+	_ "github.com/lib/pq"
+
 	"github.com/techmexdev/socialnet"
-	"github.com/techmexdev/socialnet/pkg/storage/memo"
+	"github.com/techmexdev/socialnet/pkg/storage/postgres"
 )
 
+var dsn string
+
+func init() {
+	dsn = "postgres://socialnettest:socialnettest@localhost/socialnettest?sslmode=disable"
+	postgres.MigrateUp("file://migrations", dsn)
+}
+
 func TestUserStore(t *testing.T) {
-	userStore := memo.NewUserStorage()
+	defer postgres.MigrateDown("file://migrations", dsn)
+
+	userStore := postgres.NewUserStorage(dsn)
 	john := socialnet.User{
 		Username: "jlennon", FirstName: "John", LastName: "Lennon", Email: "jlennon@beatles.com", Password: "Strawberryfields67!",
 	}
 
 	storedJohn, err := userStore.Create(john)
 	if err != nil {
-		t.Error(err)
+		t.Error("error creating user: ", err)
 	}
 
 	if storedJohn.Username != john.Username {
@@ -24,7 +36,7 @@ func TestUserStore(t *testing.T) {
 
 	storedJohn, err = userStore.Read(john.Username)
 	if err != nil {
-		t.Error(err)
+		t.Error("error reading user: ", err)
 	}
 
 	if storedJohn.Username != john.Username {
@@ -34,7 +46,7 @@ func TestUserStore(t *testing.T) {
 	john.LastName = "Lemon"
 	newJohn, err := userStore.Update(john.Username, john)
 	if err != nil {
-		t.Error(err)
+		t.Error("error updating user: ", err)
 	}
 
 	if newJohn.LastName != "Lemon" {
@@ -43,12 +55,12 @@ func TestUserStore(t *testing.T) {
 
 	err = userStore.Delete(john.Username)
 	if err != nil {
-		t.Error(err)
+		t.Error("error deleting user: ", err)
 	}
 
 	beatles, err := userStore.List()
 	if err != nil {
-		t.Error(err)
+		t.Error("error listing users: ", err)
 	}
 
 	if len(beatles) > 0 {

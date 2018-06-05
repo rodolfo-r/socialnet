@@ -4,8 +4,11 @@ import "time"
 
 // Post is a post submission.
 type Post struct {
-	CreatedAt time.Time `json:"createdAt"`
+	ID        string    `json:"-" db:"id"`
+	CreatedAt time.Time `json:"createdAt" db:"created_at"`
+	UpdatedAt time.Time `json:"updatedAt" db:"updated_at"`
 	Author    string    `json:"author"`
+	UsersID   string    `json:"-" db:"users_id"`
 	Title     string    `json:"title"`
 	Body      string    `json:"body"`
 }
@@ -27,12 +30,15 @@ type PostStorage interface {
 
 // User is a social network user.
 type User struct {
+	ID        string `json:"-"`
 	Username  string `json:"username"`
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
+	FirstName string `json:"firstName" db:"first_name"`
+	LastName  string `json:"lastName" db:"last_name"`
 	Email     string `json:"email"`
 	Posts     []Post `json:"posts"`
 	Password  string `json:"password"`
+	CreatedAt string `json:"-" db:"created_at"`
+	UpdatedAt string `json:"-" db:"updated_at"`
 }
 
 // UserService stores, and authenticates

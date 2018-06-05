@@ -5,26 +5,31 @@ import (
 	"net/http"
 	"os"
 
+	_ "github.com/golang-migrate/migrate/source/file"
+	_ "github.com/lib/pq"
 	"github.com/techmexdev/socialnet"
 	"github.com/techmexdev/socialnet/pkg/auth"
 	"github.com/techmexdev/socialnet/pkg/handler"
-	"github.com/techmexdev/socialnet/pkg/storage/memo"
+	"github.com/techmexdev/socialnet/pkg/storage/postgres"
 )
 
 func main() {
 	addr := os.Getenv("ADDRESS")
 	sign := os.Getenv("JWT_SIGNATURE")
+	dsn := os.Getenv("PG_DSN")
 
 	if len(addr) == 0 || len(sign) == 0 {
-		log.Fatal("ADDRESS and JWT_SIGNATURE env vars must be set")
+		log.Fatal("PG_DSN, ADDRESS, and JWT_SIGNATURE env vars must be set")
 	}
 
-	usrStore := memo.NewUserStorage()
+	postgres.MigrateUp("file://pkg/storage/postgres/migrations", dsn)
+
+	usrStore := postgres.NewUserStorage(dsn)
 	usrSvc := socialnet.UserService{
 		Store: usrStore, Auth: auth.New(usrStore),
 	}
 	postSvc := socialnet.PostService{
-		Store: memo.NewPostStorage(),
+		Store: postgres.NewPostStorage(dsn),
 	}
 	router := handler.New(usrSvc, postSvc, handler.Options{
 		Log: true, Address: addr, Signature: sign,

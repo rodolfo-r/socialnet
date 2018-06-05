@@ -1,15 +1,34 @@
-package memo_test
+package postgres_test
 
 import (
+	"log"
 	"testing"
 	"time"
 
+	_ "github.com/golang-migrate/migrate/source/file"
+	_ "github.com/lib/pq"
 	"github.com/techmexdev/socialnet"
-	"github.com/techmexdev/socialnet/pkg/storage/memo"
+	"github.com/techmexdev/socialnet/pkg/storage/postgres"
 )
 
+var dsn string
+
+func init() {
+	dsn = "postgres://socialnettest:socialnettest@localhost/socialnettest?sslmode=disable"
+	postgres.MigrateUp("file://migrations", dsn)
+
+	ringo := socialnet.User{Username: "rstarr"}
+	userStore := postgres.NewUserStorage(dsn)
+	_, err := userStore.Create(ringo)
+	if err != nil {
+		log.Fatal("could not create user ringo: ", err)
+	}
+}
+
 func TestPostStore(t *testing.T) {
-	postStore := memo.NewPostStorage()
+	defer postgres.MigrateDown("file://migrations", dsn)
+
+	postStore := postgres.NewPostStorage(dsn)
 	octopus := socialnet.Post{
 		CreatedAt: time.Now(), Author: "rstarr", Title: "Octopus's Garden",
 		Body: "I'd like to be. Under the sea. In an octopus' garden. In the shade.",
@@ -17,7 +36,7 @@ func TestPostStore(t *testing.T) {
 
 	storedOcto, err := postStore.Create(octopus)
 	if err != nil {
-		t.Error(err)
+		t.Errorf("could not create %v: %s", octopus, err)
 	}
 
 	if storedOcto.Title != octopus.Title {
@@ -26,7 +45,7 @@ func TestPostStore(t *testing.T) {
 
 	storedOcto, err = postStore.Read("rstarr", octopus.Title)
 	if err != nil {
-		t.Error(err)
+		t.Errorf("could not read %s from %s: %s", octopus.Title, "rstarr", err)
 	}
 
 	if storedOcto.Body != octopus.Body {
@@ -36,7 +55,7 @@ func TestPostStore(t *testing.T) {
 	octopus.Body = "He'd let us in. Knows where we've been. In his octopus' garden. In the shade."
 	newOcto, err := postStore.Update("rstarr", octopus.Title, octopus)
 	if err != nil {
-		t.Error(err)
+		t.Errorf("could not update %s from %s: %s", octopus.Title, "rstarr", err)
 	}
 
 	if newOcto.Body != octopus.Body {
@@ -45,12 +64,12 @@ func TestPostStore(t *testing.T) {
 
 	err = postStore.Delete("rstarr", octopus.Title)
 	if err != nil {
-		t.Error(err)
+		t.Errorf("could not delete %s from %s: %s", octopus.Title, "rstarr", err)
 	}
 
 	posts, err := postStore.List()
 	if err != nil {
-		t.Error(err)
+		t.Error("could not list all posts: ", err)
 	}
 
 	if len(posts) > 0 {
