@@ -33,5 +33,5 @@ func (h *handler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, map[string]string{"token": token}, 200)
+	h.r.JSON(w, http.StatusOK, map[string]string{"token": token})
 }

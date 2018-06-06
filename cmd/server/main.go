@@ -26,7 +26,7 @@ func main() {
 
 	usrStore := postgres.NewUserStorage(dsn)
 	usrSvc := socialnet.UserService{
-		Store: usrStore, Auth: auth.New(usrStore),
+		Store: usrStore, Auth: auth.New(usrStore, addr, sign),
 	}
 	postSvc := socialnet.PostService{
 		Store: postgres.NewPostStorage(dsn),

@@ -5,6 +5,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/techmexdev/socialnet"
+	"github.com/unrolled/render"
 )
 
 // Options is configuration for the router
@@ -23,12 +24,13 @@ type route struct {
 type handler struct {
 	userSvc socialnet.UserService
 	postSvc socialnet.PostService
+	r       render.Render
 }
 
 // New creates a router with all handlers
 func New(userSvc socialnet.UserService, postSvc socialnet.PostService, options Options) *mux.Router {
 	router := mux.NewRouter()
-	h := handler{userSvc: userSvc, postSvc: postSvc}
+	h := handler{userSvc, postSvc, *render.New()}
 
 	routes := []route{
 		{method: "POST", path: "/signup", handler: h.SignUp},
@@ -48,4 +50,3 @@ func New(userSvc socialnet.UserService, postSvc socialnet.PostService, options O
 
 	return router
 }
-

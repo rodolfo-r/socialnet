@@ -25,5 +25,5 @@ func (h *handler) Settings(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, set, 200)
+	h.r.JSON(w, http.StatusOK, set)
 }

@@ -18,5 +18,5 @@ func (h *handler) Profile(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 		return
 	}
-	writeJSON(w, prof, http.StatusOK)
+	h.r.JSON(w, http.StatusOK, prof)
 }

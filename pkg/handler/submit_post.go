@@ -35,5 +35,5 @@ func (h *handler) SubmitPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, createdPost, http.StatusCreated)
+	h.r.JSON(w, http.StatusCreated, createdPost)
 }

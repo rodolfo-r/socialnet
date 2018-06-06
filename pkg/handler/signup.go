@@ -41,5 +41,5 @@ func (h *handler) SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, map[string]string{"token": token}, 201)
+	h.r.JSON(w, http.StatusCreated, map[string]string{"token": token})
 }
