@@ -4,16 +4,13 @@ import (
 	"testing"
 
 	"github.com/techmexdev/socialnet"
-	"github.com/techmexdev/socialnet/pkg/auth"
-	"github.com/techmexdev/socialnet/pkg/storage/memo"
+	"github.com/techmexdev/socialnet/pkg/server/auth"
+	"github.com/techmexdev/socialnet/pkg/server/storage/memo"
 )
 
 func TestValidateCreds(t *testing.T) {
 	userStore := memo.NewUserStorage()
 	_, err := userStore.Create(socialnet.User{Username: "jlennon", Password: "Strawberryfields67!"})
-	if err != nil {
-		t.Error(err)
-	}
 
 	userAuth := auth.New(userStore, "localhost", "test jwt signature")
 

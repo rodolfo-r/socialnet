@@ -8,21 +8,21 @@ import (
 	_ "github.com/golang-migrate/migrate/source/file"
 	_ "github.com/lib/pq"
 	"github.com/techmexdev/socialnet"
-	"github.com/techmexdev/socialnet/pkg/auth"
-	"github.com/techmexdev/socialnet/pkg/handler"
-	"github.com/techmexdev/socialnet/pkg/storage/postgres"
+	"github.com/techmexdev/socialnet/pkg/server/auth"
+	"github.com/techmexdev/socialnet/pkg/server/handler"
+	"github.com/techmexdev/socialnet/pkg/server/storage/postgres"
 )
 
 func main() {
-	addr := os.Getenv("ADDRESS")
-	sign := os.Getenv("JWT_SIGNATURE")
+	addr := "localhost:3001"
 	dsn := os.Getenv("PG_DSN")
+	sign := os.Getenv("JWT_SIGNATURE")
 
-	if len(addr) == 0 || len(sign) == 0 {
-		log.Fatal("PG_DSN, ADDRESS, and JWT_SIGNATURE env vars must be set")
+	if len(dsn) == 0 || len(sign) == 0 {
+		log.Fatal("PG_DSN, and JWT_SIGNATURE env vars must be set")
 	}
 
-	postgres.MigrateUp("file://pkg/storage/postgres/migrations", dsn)
+	postgres.MigrateUp("file://pkg/server/storage/postgres/migrations", dsn)
 
 	usrStore := postgres.NewUserStorage(dsn)
 	usrSvc := socialnet.UserService{

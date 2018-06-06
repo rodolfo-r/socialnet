@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/techmexdev/socialnet"
-	"github.com/techmexdev/socialnet/pkg/storage/memo"
+	"github.com/techmexdev/socialnet/pkg/server/storage/memo"
 )
 
 func TestPostStore(t *testing.T) {

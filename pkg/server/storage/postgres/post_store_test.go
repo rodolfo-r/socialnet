@@ -8,7 +8,7 @@ import (
 	_ "github.com/golang-migrate/migrate/source/file"
 	_ "github.com/lib/pq"
 	"github.com/techmexdev/socialnet"
-	"github.com/techmexdev/socialnet/pkg/storage/postgres"
+	"github.com/techmexdev/socialnet/pkg/server/storage/postgres"
 )
 
 var dsn string
@@ -76,3 +76,4 @@ func TestPostStore(t *testing.T) {
 		t.Errorf("should have deleted all posts. have %#v, want none", posts)
 	}
 }
+

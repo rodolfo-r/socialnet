@@ -10,9 +10,9 @@ import (
 
 	"github.com/techmexdev/handlertest"
 	"github.com/techmexdev/socialnet"
-	"github.com/techmexdev/socialnet/pkg/auth"
-	"github.com/techmexdev/socialnet/pkg/handler"
-	"github.com/techmexdev/socialnet/pkg/storage/memo"
+	"github.com/techmexdev/socialnet/pkg/server/auth"
+	"github.com/techmexdev/socialnet/pkg/server/handler"
+	"github.com/techmexdev/socialnet/pkg/server/storage/memo"
 )
 
 func TestSignUp(t *testing.T) {

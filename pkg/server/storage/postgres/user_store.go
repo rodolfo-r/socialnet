@@ -41,7 +41,7 @@ func (db *UserStorage) Create(usr socialnet.User) (socialnet.User, error) {
 
 // Read retrieves a User from the in memory array in UserStorage.
 func (db *UserStorage) Read(username string) (socialnet.User, error) {
-	q := `SELECT * FROM users WHERE username = $1`
+	q := "SELECT * FROM users WHERE username = $1"
 
 	var usr socialnet.User
 
@@ -49,6 +49,17 @@ func (db *UserStorage) Read(username string) (socialnet.User, error) {
 	if err != nil {
 		return socialnet.User{}, err
 	}
+
+	q = "SELECT * FROM posts WHERE users_id = $1"
+
+	var pp []socialnet.Post
+
+	err = db.Select(&pp, q, usr.ID)
+	if err != nil {
+		return socialnet.User{}, err
+	}
+
+	usr.Posts = pp
 
 	return usr, nil
 }
