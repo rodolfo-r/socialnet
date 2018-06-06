@@ -35,7 +35,7 @@ func (h *handler) SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, err := createToken(usr.Username)
+	token, err := h.userSvc.Auth.CreateToken(usr.Username)
 	if err != nil {
 		serverError(w, err)
 		return

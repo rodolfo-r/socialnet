@@ -11,15 +11,15 @@ import (
 	"github.com/techmexdev/handlertest"
 	"github.com/techmexdev/socialnet"
 	"github.com/techmexdev/socialnet/pkg/auth"
-	"github.com/techmexdev/socialnet/pkg/storage/memo"
 	"github.com/techmexdev/socialnet/pkg/handler"
+	"github.com/techmexdev/socialnet/pkg/storage/memo"
 )
 
 func TestSignUp(t *testing.T) {
 	t.Parallel()
 
 	usrStore := memo.NewUserStorage()
-	usrSvc := socialnet.UserService{Store: usrStore, Auth: *auth.New(usrStore)}
+	usrSvc := socialnet.UserService{Store: usrStore, Auth: *auth.New(usrStore, "localhost", "test jwt string")}
 	postSvc := socialnet.PostService{Store: memo.NewPostStorage()}
 
 	router := handler.New(usrSvc, postSvc, handler.Options{

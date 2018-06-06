@@ -60,7 +60,9 @@ type UserStorage interface {
 
 // UserAuth validates a user's credentials
 type UserAuth interface {
-	Validate(username, password string) error
+	CreateToken(username string) (token string, err error)
+	ValidateToken(token string) (username string, err error)
+	ValidateCreds(username, password string) error
 }
 
 // Profile is a public profile.

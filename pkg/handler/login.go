@@ -21,13 +21,13 @@ func (h *handler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.userSvc.Auth.Validate(usr.Username, usr.Password)
+	err = h.userSvc.Auth.ValidateCreds(usr.Username, usr.Password)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
 		return
 	}
 
-	token, err := createToken(usr.Username)
+	token, err := h.userSvc.Auth.CreateToken(usr.Username)
 	if err != nil {
 		serverError(w, err)
 		return
