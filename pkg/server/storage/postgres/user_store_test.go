@@ -43,6 +43,10 @@ func TestUserStore(t *testing.T) {
 		t.Errorf("username should be stored. have %s, want %s", storedJohn.Username, john.Username)
 	}
 
+	if storedJohn.Password == john.Password {
+		t.Errorf("user storage should hash passwords")
+	}
+
 	john.LastName = "Lemon"
 	newJohn, err := userStore.Update(john.Username, john)
 	if err != nil {

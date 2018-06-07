@@ -4,6 +4,8 @@ import (
 	"strconv"
 	"time"
 
+	"golang.org/x/crypto/bcrypt"
+
 	"github.com/jmoiron/sqlx"
 	uuid "github.com/satori/go.uuid"
 	"github.com/techmexdev/socialnet"
@@ -28,6 +30,13 @@ func (db *UserStorage) Create(usr socialnet.User) (socialnet.User, error) {
 	if err != nil {
 		return socialnet.User{}, err
 	}
+
+	hash, err := bcrypt.GenerateFromPassword([]byte(usr.Password), 12)
+	if err != nil {
+		return socialnet.User{}, err
+	}
+
+	usr.Password = string(hash)
 
 	createdAt := time.Now().Format(time.RFC3339)
 
