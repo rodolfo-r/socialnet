@@ -43,11 +43,14 @@ func New(userSvc socialnet.UserService, postSvc socialnet.PostService, options O
 		{method: "GET", path: "/api/settings", handler: h.Settings},
 		{method: "POST", path: "/api/submit-post", handler: h.SubmitPost},
 		{method: "GET", path: "/api/user/{username}", handler: h.Profile},
+		{method: "POST", path: "/api/profile-picture", handler: h.ProfilePicture},
 	}
 
 	for _, r := range rr {
 		server.router.HandleFunc(r.path, r.handler).Methods(r.method)
 	}
+
+	server.router.PathPrefix("/files/").Handler(http.StripPrefix("/files/", http.FileServer(http.Dir("files"))))
 
 	if options.Log {
 		server.router.Use(LogMiddleware)

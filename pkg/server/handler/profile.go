@@ -12,7 +12,11 @@ func (h *handler) Profile(w http.ResponseWriter, r *http.Request) {
 	usr, err := h.userSvc.Store.Read(un)
 
 	prof := &socialnet.Profile{
-		Username: usr.Username, FirstName: usr.FirstName, LastName: usr.LastName, Posts: usr.Posts,
+		Username:  usr.Username,
+		ImageURL:  usr.ImageURL,
+		FirstName: usr.FirstName,
+		LastName:  usr.LastName,
+		Posts:     usr.Posts,
 	}
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)

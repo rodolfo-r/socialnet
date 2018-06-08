@@ -16,9 +16,17 @@ func (h *handler) Settings(w http.ResponseWriter, r *http.Request) {
 	}
 
 	usr, err := h.userSvc.Store.Read(username)
+	if err != nil {
+		serverError(w, err)
+		return
+	}
 
 	set := &socialnet.Settings{
-		Username: usr.Username, FirstName: usr.FirstName, LastName: usr.LastName, Email: usr.Email,
+		Username:  usr.Username,
+		ImageURL:  usr.ImageURL,
+		FirstName: usr.FirstName,
+		LastName:  usr.LastName,
+		Email:     usr.Email,
 	}
 	if err != nil {
 		serverError(w, err)

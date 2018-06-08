@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 )
 
 // LogMiddleware logs request proto, method, url, headers, and body
@@ -15,6 +16,9 @@ func LogMiddleware(next http.Handler) http.Handler {
 		tee := io.TeeReader(r.Body, &buf)
 		r.Body = ioutil.NopCloser(&buf)
 		reqBody, _ := ioutil.ReadAll(tee)
+		if strings.Contains(strings.ToLower(r.Header.Get("Content-Type")), "multipart/form-data") {
+			reqBody = nil
+		}
 		log.Printf("%s - %s - %s - %s - %s ", r.Proto, r.Method, r.URL, r.Header, reqBody)
 		next.ServeHTTP(w, r)
 	})

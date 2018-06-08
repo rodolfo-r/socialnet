@@ -1,6 +1,7 @@
 package postgres
 
 import (
+	"log"
 	"strconv"
 	"time"
 
@@ -23,8 +24,8 @@ func NewUserStorage(dsn string) *UserStorage {
 
 // Create adds a User to the in memory array in UserStorage.
 func (db *UserStorage) Create(usr socialnet.User) (socialnet.User, error) {
-	q := "INSERT INTO users(id, username, email, password, first_name, last_name, created_at, updated_at)" +
-		" VALUES ($1, $2, $3, $4, $5, $6, $7, $8)"
+	q := "INSERT INTO users(id, username, image_url, email, password, first_name, last_name, created_at, updated_at)" +
+		" VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)"
 
 	id, err := uuid.NewV4()
 	if err != nil {
@@ -40,7 +41,7 @@ func (db *UserStorage) Create(usr socialnet.User) (socialnet.User, error) {
 
 	createdAt := time.Now().Format(time.RFC3339)
 
-	_, err = db.Exec(q, id, usr.Username, usr.Email, usr.Password, usr.FirstName, usr.LastName, createdAt, createdAt)
+	_, err = db.Exec(q, id, usr.Username, usr.ImageURL, usr.Email, usr.Password, usr.FirstName, usr.LastName, createdAt, createdAt)
 	if err != nil {
 		return socialnet.User{}, err
 	}
@@ -76,8 +77,12 @@ func (db *UserStorage) Read(username string) (socialnet.User, error) {
 // Update uses the non-nil values from the usr to replace the values in the database.
 func (db *UserStorage) Update(username string, usr socialnet.User) (socialnet.User, error) {
 	params, vals, args := getParamsValsArgsFromUser(usr)
-	q := "UPDATE users SET (" + params + ") = (" + vals + ") WHERE username = '$1'"
-	_, err := db.Exec(q, args...)
+	log.Printf("params: %v", params)
+	log.Printf("vals: %#v", vals)
+	log.Printf("args: %v", args)
+	q := "UPDATE users SET " + params + " = " + vals + " WHERE username = $" + strconv.Itoa(len(args)+1)
+	log.Println("query:", q)
+	_, err := db.Exec(q, append(args, username)...)
 	if err != nil {
 		return socialnet.User{}, err
 	}
@@ -122,6 +127,13 @@ func getParamsValsArgsFromUser(usr socialnet.User) (params, vals string, args []
 		params, vals, args = appendParamsAndArgs("email", usr.Email, params, vals, args)
 	}
 
+	if usr.ImageURL != "" {
+		params, vals, args = appendParamsAndArgs("image_url", usr.ImageURL, params, vals, args)
+	}
+	if len(args) > 1 {
+		params = "(" + params + ")"
+		vals = "(" + vals + ")"
+	}
 	return params, vals, args
 }
 

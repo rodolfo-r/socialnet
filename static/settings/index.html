@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Settings</title>
+    <link rel="stylesheet" href="static/settings/styles.css" type="text/css" media="all" />
+  </head>
+  <body>
+    <h3>Profile Pic: </h3>
+    <img id="profile-pic" src="{{ .ImageURL }}" src="" alt="profile picture"/>
+    <div id="change-profile">
+      Change profile pic: <input type="file" class="pic" />
+      <input class="submit" type="submit" value="Change"/>
+    </form>
+    <h3>Username: {{ .Username }}</h3>
+    <h3>First Name: {{ .FirstName }}</h3>
+    <h3>Last Name: {{ .LastName }}</h3>
+    <h3>Email: {{ .Email }}</h3>
+  </body>
+  <script defer="defer" src="/static/settings/script.js" charset="utf-8"></script>
+</html>

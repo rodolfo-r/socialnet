@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Profile</title>
+    <link rel="stylesheet" href="/static/profile/styles.css" type="text/css" media="all" />
+  </head>
+  <body>
+    <div id="info">
+      <img id="profile-pic" src="{{ .ImageURL }}" src="" alt="profile picture"/>
+      <h2>Username: {{ .Username }}</h2>
+      <h2>First name: {{ .FirstName }}</h2>
+      <h2>Last name: {{ .LastName }}</h2>
+    </div>
+    <div id="posts">
+      <h2>Posts: </h2>
+      {{ range .Posts }}
+      <h3>{{ .Title }} </h3> 
+      <p> {{ .Body }} </p>
+      {{ end }}
+    </div>
+    <div>
+      <div id="new-post">
+        <h2>New Post:</h2>
+        <input type="text" class="title"></input>
+        <textarea class="body" height="300px"></textarea>
+        <input type="button" class="submit" value="submit"></input>
+      </div>
+    </div>
+    <script defer="defer" src="/static/profile/script.js" charset="utf-8"></script>
+  </body>
+</html>

@@ -32,6 +32,7 @@ type PostStorage interface {
 type User struct {
 	ID        string `json:"-"`
 	Username  string `json:"username"`
+	ImageURL  string `json:"imageURL" db:"image_url"`
 	FirstName string `json:"firstName" db:"first_name"`
 	LastName  string `json:"lastName" db:"last_name"`
 	Email     string `json:"email"`
@@ -68,6 +69,7 @@ type UserAuth interface {
 // Profile is a public profile.
 type Profile struct {
 	Username  string `json:"username"`
+	ImageURL  string `json:"imageURL" db:"image_url"`
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`
 	Posts     []Post `json:"posts"`
@@ -76,6 +78,7 @@ type Profile struct {
 // Settings contain personal details.
 type Settings struct {
 	Username  string `json:"username"`
+	ImageURL  string `json:"imageURL" db:"image_url"`
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`
 	Email     string `json:"email"`

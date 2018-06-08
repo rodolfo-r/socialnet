@@ -13,7 +13,7 @@ import (
 // token to the api server, and responds with an html template.
 // responds with a template with the response data.
 func Profile(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles("./static/html/profile.html")
+	t, err := template.ParseFiles("./static/profile/index.html")
 	if err != nil {
 		serverError(w, err)
 		return

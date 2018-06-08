@@ -43,5 +43,5 @@ func (server Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 // Home responds with the root index.html.
 func Home(w http.ResponseWriter, r *http.Request) {
-	http.FileServer(http.Dir("./static/html/")).ServeHTTP(w, r)
+	http.FileServer(http.Dir("./static/index/")).ServeHTTP(w, r)
 }
