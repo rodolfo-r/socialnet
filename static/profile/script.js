@@ -4,7 +4,7 @@ document.querySelector('#new-post .submit').addEventListener('click', async () =
 
  const authToken = getCookie('socialnet_token')
   try {
-   await fetch('http://localhost:3001/api/submit-post', {
+   await fetch('http://localhost:3001/submit-post', {
     method: 'post',
     headers: new Headers({
       'Content-Type': 'Application/json',

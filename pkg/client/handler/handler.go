@@ -25,6 +25,7 @@ func New() *Server {
 		{method: "GET", path: "/", handler: Home},
 		{method: "GET", path: "/settings", handler: Settings},
 		{method: "GET", path: "/user/{username}", handler: Profile},
+		{method: "GET", path: "/users", handler: Users},
 	}
 
 	s.router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))

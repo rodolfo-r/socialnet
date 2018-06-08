@@ -38,12 +38,13 @@ func New(userSvc socialnet.UserService, postSvc socialnet.PostService, options O
 	h := handler{userSvc, postSvc, *render.New()}
 
 	rr := []route{
-		{method: "POST", path: "/api/signup", handler: h.SignUp},
-		{method: "POST", path: "/api/login", handler: h.Login},
-		{method: "GET", path: "/api/settings", handler: h.Settings},
-		{method: "POST", path: "/api/submit-post", handler: h.SubmitPost},
-		{method: "GET", path: "/api/user/{username}", handler: h.Profile},
-		{method: "POST", path: "/api/profile-picture", handler: h.ProfilePicture},
+		{method: "POST", path: "/signup", handler: h.SignUp},
+		{method: "POST", path: "/login", handler: h.Login},
+		{method: "GET", path: "/settings", handler: h.Settings},
+		{method: "POST", path: "/submit-post", handler: h.SubmitPost},
+		{method: "GET", path: "/user/{username}", handler: h.Profile},
+		{method: "POST", path: "/profile-picture", handler: h.ProfilePicture},
+		{method: "GET", path: "/users", handler: h.Users},
 	}
 
 	for _, r := range rr {

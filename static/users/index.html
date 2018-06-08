@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Users</title>
+    <link rel="stylesheet" href="/static/users/styles.css" type="text/css" media="all" />
+  </head>
+  <body>
+    <div id="user-list">
+      {{ range . }}
+      <div class="user-item">
+        <a data-id="{{ .Username }}" href="">
+          <img src="{{ .ImageURL }}" alt="{{ .Username }}"/>
+        </a>
+        <span>{{ .Username }}</span>
+      </div> 
+      {{ end }}
+    </div>
+  </body>
+  <script defer="defer" src="/static/users/script.js" charset="utf-8"></script>
+</html>

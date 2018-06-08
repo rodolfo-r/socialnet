@@ -17,7 +17,7 @@ func Settings(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	apiReq, err := http.NewRequest("GET", "http://localhost:3001/api/settings", nil)
+	apiReq, err := http.NewRequest("GET", "http://localhost:3001/settings", nil)
 	if err != nil {
 		serverError(w, err)
 		return
@@ -37,6 +37,7 @@ func Settings(w http.ResponseWriter, r *http.Request) {
 		serverError(w, err)
 		return
 	}
+	defer res.Body.Close()
 
 	var set socialnet.Settings
 	err = json.NewDecoder(res.Body).Decode(&set)

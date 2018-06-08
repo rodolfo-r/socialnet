@@ -20,7 +20,7 @@ func Profile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	username := mux.Vars(r)["username"]
-	apiReq, err := http.NewRequest("GET", "http://localhost:3001/api/user/"+username, nil)
+	apiReq, err := http.NewRequest("GET", "http://localhost:3001/user/"+username, nil)
 	if err != nil {
 		serverError(w, err)
 		return

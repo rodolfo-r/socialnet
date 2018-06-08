@@ -6,7 +6,7 @@ document.querySelector('#change-profile .submit').addEventListener('click', asyn
   formData.append("image", image)
 
   const xhr = new XMLHttpRequest()
-  xhr.open('post', 'http://localhost:3001/api/profile-picture', true)
+  xhr.open('post', 'http://localhost:3001/profile-picture', true)
   xhr.setRequestHeader('Authorization', `Bearer ${authToken}`)
   xhr.send(formData)
 })

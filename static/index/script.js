@@ -13,7 +13,7 @@ const addClickListener = form => {
 
     let token
     try {
-      token = await fetch(`http://localhost:3001/api/${form}`, {
+      token = await fetch(`http://localhost:3001/${form}`, {
         method: 'post',
         headers: new Headers({
           'Content-Type': 'Application/json'

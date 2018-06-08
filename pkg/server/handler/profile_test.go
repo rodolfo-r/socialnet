@@ -45,7 +45,7 @@ func TestProfile(t *testing.T) {
 		},
 		{
 			Name:       "User exists",
-			Request:    httptest.NewRequest("GET", "/jlennon", nil),
+			Request:    httptest.NewRequest("GET", "/user/jlennon", nil),
 			StatusCode: http.StatusOK,
 			BodyAssert: func(b []byte) error {
 				return handlertest.Assert(strings.Contains(string(b), "firstName"), "should contain firstName property")
