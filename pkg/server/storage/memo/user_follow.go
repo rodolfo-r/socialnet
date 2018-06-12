@@ -32,11 +32,11 @@ func (uf *UserFollow) Follow(follower, followee string) error {
 }
 
 // Followers returns a user's followers
-func (uf *UserFollow) Followers(username string) ([]socialnet.User, error) {
-	var uu []socialnet.User
+func (uf *UserFollow) Followers(username string) ([]socialnet.UserItem, error) {
+	var uu []socialnet.UserItem
 	for _, f := range uf.follows {
 		if f.followee == username {
-			u := socialnet.User{Username: f.follower}
+			u := socialnet.UserItem{Username: f.follower}
 			uu = append(uu, u)
 		}
 	}
@@ -44,11 +44,11 @@ func (uf *UserFollow) Followers(username string) ([]socialnet.User, error) {
 }
 
 // Following returns a the user's a user is following
-func (uf *UserFollow) Following(username string) ([]socialnet.User, error) {
-	var uu []socialnet.User
+func (uf *UserFollow) Following(username string) ([]socialnet.UserItem, error) {
+	var uu []socialnet.UserItem
 	for _, f := range uf.follows {
 		if f.follower == username {
-			u := socialnet.User{Username: f.followee}
+			u := socialnet.UserItem{Username: f.followee}
 			uu = append(uu, u)
 		}
 	}

@@ -69,8 +69,8 @@ type UserAuth interface {
 
 // UserFollow updates follow relationships between users.
 type UserFollow interface {
-	Follow(followerUsername, toFollowUsername string) error
-	Unfollow(followerUsername, toUnfollowUsername string) error
+	Follow(follower, followee string) error
+	Unfollow(follower, followee string) error
 	Followers(username string) ([]UserItem, error)
 	Following(username string) ([]UserItem, error)
 }
@@ -102,4 +102,14 @@ type UserItem struct {
 	ImageURL  string `json:"imageURL" db:"image_url"`
 	FirstName string `json:"firstName" db:"first_name"`
 	LastName  string `json:"lastName" db:"last_name"`
+}
+
+// Feed is a collection of a user's following
+// list posts
+type Feed []FeedItem
+
+// FeedItem is a user post
+type FeedItem struct {
+	ProfileImageURL string `json:"imageURL"`
+	Post            `json:"post"`
 }

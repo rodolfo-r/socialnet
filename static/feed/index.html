@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/static/feed/styles.css" type="text/css" media="all" />
+    <title>Socialnet - Feed</title>
+  </head>
+  <body>
+    {{ range . }}
+      <div id="post">
+        <a data-id="{{ .Post.Author }}">
+          <img id="usr-img" src="{{ .ProfileImageURL }}" alt=""/>
+        </a>
+        <a data-id="{{ .Post.Author }}">
+          <h3>{{ .Post.Author }} </h3>
+        </a>
+        <h3>{{ .Post.Title }} </h3>
+        <h3>{{ .Post.Body }} </h3>
+        <h3>{{ .Post.CreatedAt }} </h3>
+      </div>
+    {{ end }}
+    <script src="/static/feed/script.js" charset="utf-8"></script>
+  </body>
+</html>

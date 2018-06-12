@@ -26,6 +26,7 @@ func New() *Server {
 		{method: "GET", path: "/settings", handler: Settings},
 		{method: "GET", path: "/user/{username}", handler: Profile},
 		{method: "GET", path: "/users", handler: Users},
+		{method: "GET", path: "/feed", handler: Feed},
 	}
 
 	server.router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
@@ -33,7 +34,6 @@ func New() *Server {
 	for _, r := range rr {
 		server.router.HandleFunc(r.path, r.handler).Methods(r.method)
 	}
-	server.router.Use(LogMiddleware)
 
 	return server
 }

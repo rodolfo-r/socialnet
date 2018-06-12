@@ -69,6 +69,10 @@ func (db *UserStorage) Read(username string) (socialnet.User, error) {
 		return socialnet.User{}, err
 	}
 
+	for i := range pp {
+		pp[i].Author = username
+	}
+
 	usr.Posts = pp
 
 	return usr, nil

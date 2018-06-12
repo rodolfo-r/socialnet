@@ -47,6 +47,7 @@ func New(userSvc socialnet.UserService, postSvc socialnet.PostService, options O
 		{method: "GET", path: "/users", handler: h.Users},
 		{method: "POST", path: "/follow", handler: h.Follow},
 		{method: "POST", path: "/unfollow", handler: h.Unfollow},
+		{method: "GET", path: "/feed", handler: h.Feed},
 	}
 
 	for _, r := range rr {
