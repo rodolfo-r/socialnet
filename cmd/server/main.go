@@ -24,9 +24,11 @@ func main() {
 
 	postgres.MigrateUp("file://pkg/server/storage/postgres/migrations", dsn)
 
-	usrStore := postgres.NewUserStorage(dsn)
+	userStore := postgres.NewUserStorage(dsn)
+	userFollow := postgres.NewUserFollow(dsn)
+
 	usrSvc := socialnet.UserService{
-		Store: usrStore, Auth: auth.New(usrStore, addr, sign),
+		Store: userStore, Auth: auth.New(userStore, addr, sign), Follow: userFollow,
 	}
 	postSvc := socialnet.PostService{
 		Store: postgres.NewPostStorage(dsn),

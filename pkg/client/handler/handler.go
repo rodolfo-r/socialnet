@@ -19,7 +19,7 @@ type route struct {
 
 // New creates a server that responds to http requests.
 func New() *Server {
-	s := &Server{router: mux.NewRouter()}
+	server := &Server{router: mux.NewRouter()}
 
 	rr := []route{
 		{method: "GET", path: "/", handler: Home},
@@ -28,13 +28,14 @@ func New() *Server {
 		{method: "GET", path: "/users", handler: Users},
 	}
 
-	s.router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	server.router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
 	for _, r := range rr {
-		s.router.HandleFunc(r.path, r.handler).Methods(r.method)
+		server.router.HandleFunc(r.path, r.handler).Methods(r.method)
 	}
+	server.router.Use(LogMiddleware)
 
-	return s
+	return server
 }
 
 // ServeHTTP responds to http requests by delegating to the server.router.

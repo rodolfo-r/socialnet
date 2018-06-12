@@ -45,8 +45,9 @@ type User struct {
 // UserService stores, and authenticates
 // a user.
 type UserService struct {
-	Store UserStorage
-	Auth  UserAuth
+	Store  UserStorage
+	Auth   UserAuth
+	Follow UserFollow
 }
 
 // UserStorage is an interface for
@@ -66,13 +67,24 @@ type UserAuth interface {
 	ValidateCreds(username, password string) error
 }
 
+// UserFollow updates follow relationships between users.
+type UserFollow interface {
+	Follow(followerUsername, toFollowUsername string) error
+	Unfollow(followerUsername, toUnfollowUsername string) error
+	Followers(username string) ([]UserItem, error)
+	Following(username string) ([]UserItem, error)
+}
+
 // Profile is a public profile.
 type Profile struct {
-	Username  string `json:"username"`
-	ImageURL  string `json:"imageURL" db:"image_url"`
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
-	Posts     []Post `json:"posts"`
+	Username   string     `json:"username"`
+	ImageURL   string     `json:"imageURL" db:"image_url"`
+	FirstName  string     `json:"firstName"`
+	LastName   string     `json:"lastName"`
+	Posts      []Post     `json:"posts"`
+	Followers  []UserItem `json:"followers" db:"-"`
+	Following  []UserItem `json:"following" db:"-"`
+	IsFollower bool       `json:"isFollower" db:"-"`
 }
 
 // Settings contain personal details.
@@ -82,4 +94,12 @@ type Settings struct {
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`
 	Email     string `json:"email"`
+}
+
+// UserItem is used in user list. i.e. a user's followers
+type UserItem struct {
+	Username  string `json:"username"`
+	ImageURL  string `json:"imageURL" db:"image_url"`
+	FirstName string `json:"firstName" db:"first_name"`
+	LastName  string `json:"lastName" db:"last_name"`
 }

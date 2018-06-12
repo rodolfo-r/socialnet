@@ -12,7 +12,10 @@
       <h2>Username: {{ .Username }}</h2>
       <h2>First name: {{ .FirstName }}</h2>
       <h2>Last name: {{ .LastName }}</h2>
+      <h3>Followers: {{ len .Followers }}</h3>
+      <h3>Following: {{ len .Following }}</h3>
     </div>
+    <input data-id={{ .IsFollower }} id="follow" value="Follow" type="hidden"></input>
     <div id="posts">
       <h2>Posts: </h2>
       {{ range .Posts }}
