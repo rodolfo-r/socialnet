@@ -47,20 +47,21 @@ func (db *PostStorage) Create(post socialnet.Post) (socialnet.Post, error) {
 }
 
 // Read retrieves a Post from the database.
-func (db *PostStorage) Read(author, title string) (socialnet.Post, error) {
+func (db *PostStorage) Read(username, title string) (socialnet.Post, error) {
 	q := "SELECT * FROM posts WHERE title = $1 AND users_id = (SELECT id FROM users WHERE username = $2)"
 	var post socialnet.Post
 
-	err := db.Get(&post, q, title, author)
+	err := db.Get(&post, q, title, username)
 	if err != nil {
 		return socialnet.Post{}, err
 	}
+	post.Author = username
 
 	return post, nil
 }
 
 // Update replaces a Post from the database.
-func (db *PostStorage) Update(author, title string, post socialnet.Post) (socialnet.Post, error) {
+func (db *PostStorage) Update(username, title string, post socialnet.Post) (socialnet.Post, error) {
 	params, vals, args := getParamsValsArgsFromPost(post)
 	q := "UPDATE posts SET (" + params + ") = (" + vals + ") WHERE title = '$1'" +
 		"AND users_id = (SELECT id FROM users WHERE username = '$2')"
@@ -73,11 +74,11 @@ func (db *PostStorage) Update(author, title string, post socialnet.Post) (social
 }
 
 // Delete removes a Post from the database.
-func (db *PostStorage) Delete(author, title string) error {
+func (db *PostStorage) Delete(username, title string) error {
 	q := `DELETE FROM posts WHERE title = $1
 		AND users_id = (SELECT id FROM users WHERE username = $2)`
 
-	_, err := db.Exec(q, title, author)
+	_, err := db.Exec(q, title, username)
 	if err != nil {
 		return err
 	}
@@ -86,13 +87,17 @@ func (db *PostStorage) Delete(author, title string) error {
 }
 
 // List retrieves all Posts from the database.
-func (db *PostStorage) List() ([]socialnet.Post, error) {
-	q := "SELECT * FROM posts"
+func (db *PostStorage) List(username string) ([]socialnet.Post, error) {
+	q := "SELECT * FROM posts WHERE users_id = (SELECT id FROM users WHERE username = $1)"
 	var pp []socialnet.Post
 
-	err := db.Select(&pp, q)
+	err := db.Select(&pp, q, username)
 	if err != nil {
 		return []socialnet.Post{}, err
+	}
+
+	for i := range pp {
+		pp[i].Author = username
 	}
 
 	return pp, nil

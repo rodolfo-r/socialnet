@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS follow restrict;
+DROP TABLE IF EXISTS follow CASCADE;

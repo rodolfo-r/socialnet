@@ -4,11 +4,11 @@ import "time"
 
 // Post is a post submission.
 type Post struct {
-	ID        string    `json:"-" db:"id"`
+	ID        string    `json:"id" db:"id"`
 	CreatedAt time.Time `json:"createdAt" db:"created_at"`
 	UpdatedAt time.Time `json:"updatedAt" db:"updated_at"`
 	Author    string    `json:"author"`
-	UsersID   string    `json:"-" db:"users_id"`
+	UserID    string    `json:"-" db:"users_id"`
 	Title     string    `json:"title"`
 	Body      string    `json:"body"`
 }
@@ -22,24 +22,24 @@ type PostService struct {
 // storing and retrieving posts.
 type PostStorage interface {
 	Create(Post) (Post, error)
-	Read(author, title string) (Post, error)
-	Update(author, title string, newPost Post) (Post, error)
-	Delete(author, title string) error
-	List() ([]Post, error)
+	Read(username, title string) (Post, error)
+	Update(username, title string, newPost Post) (Post, error)
+	Delete(username, title string) error
+	List(username string) ([]Post, error)
 }
 
 // User is a social network user.
 type User struct {
-	ID        string `json:"-"`
-	Username  string `json:"username"`
-	ImageURL  string `json:"imageURL" db:"image_url"`
-	FirstName string `json:"firstName" db:"first_name"`
-	LastName  string `json:"lastName" db:"last_name"`
-	Email     string `json:"email"`
-	Posts     []Post `json:"posts"`
-	Password  string `json:"password"`
-	CreatedAt string `json:"-" db:"created_at"`
-	UpdatedAt string `json:"-" db:"updated_at"`
+	ID        string    `json:"-"`
+	Username  string    `json:"username"`
+	ImageURL  string    `json:"imageURL" db:"image_url"`
+	FirstName string    `json:"firstName" db:"first_name"`
+	LastName  string    `json:"lastName" db:"last_name"`
+	Email     string    `json:"email"`
+	Posts     []Post    `json:"posts"`
+	Password  string    `json:"password"`
+	CreatedAt time.Time `json:"-" db:"created_at"`
+	UpdatedAt time.Time `json:"-" db:"updated_at"`
 }
 
 // UserService stores, and authenticates
