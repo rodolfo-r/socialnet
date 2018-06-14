@@ -1,7 +1,6 @@
 package postgres
 
 import (
-	"log"
 	"strconv"
 	"time"
 
@@ -81,11 +80,7 @@ func (db *UserStorage) Read(username string) (socialnet.User, error) {
 // Update uses the non-nil values from the usr to replace the values in the database.
 func (db *UserStorage) Update(username string, usr socialnet.User) (socialnet.User, error) {
 	params, vals, args := getParamsValsArgsFromUser(usr)
-	log.Printf("params: %v", params)
-	log.Printf("vals: %#v", vals)
-	log.Printf("args: %v", args)
 	q := "UPDATE users SET " + params + " = " + vals + " WHERE username = $" + strconv.Itoa(len(args)+1)
-	log.Println("query:", q)
 	_, err := db.Exec(q, append(args, username)...)
 	if err != nil {
 		return socialnet.User{}, err

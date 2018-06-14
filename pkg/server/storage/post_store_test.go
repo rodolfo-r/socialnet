@@ -18,13 +18,14 @@ import (
 var postStore socialnet.PostStorage
 var post socialnet.Post
 
-func TestPostStoret(t *testing.T) {
+func TestPostStore(t *testing.T) {
 	var userStore socialnet.UserStorage
 	if testMemo {
 		postStore = memo.NewPostStorage()
 		userStore = memo.NewUserStorage()
 	} else {
-		log.Println("dsn: ", dsn)
+		postgres.MigrateDown("file://postgres/migrations", dsn)
+		postgres.MigrateUp("file://postgres/migrations", dsn)
 		postStore = postgres.NewPostStorage(dsn)
 		userStore = postgres.NewUserStorage(dsn)
 	}

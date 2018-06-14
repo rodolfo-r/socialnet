@@ -18,7 +18,7 @@ func NewUserFollow(dsn string) *UserFollow {
 
 // Follow adds a follow relationship to the UserFollow.
 func (db *UserFollow) Follow(followerUsername, followeeUsername string) error {
-	q := "INSERT INTO follow (id, follower_id, followee_id) VALUES ($1, $2, $3)"
+	q := "INSERT INTO follows (id, follower_id, followee_id) VALUES ($1, $2, $3)"
 
 	id, err := uuid.NewV4()
 	if err != nil {
@@ -48,7 +48,7 @@ func (db *UserFollow) Follow(followerUsername, followeeUsername string) error {
 // Followers returns a user's followers
 func (db *UserFollow) Followers(username string) ([]socialnet.UserItem, error) {
 	q := `SELECT username, first_name, last_name, image_url FROM users WHERE id IN(
-		SELECT follower_id FROM follow WHERE followee_id = (
+		SELECT follower_id FROM follows WHERE followee_id = (
 		SELECT id FROM users WHERE username = $1))`
 
 	var uu []socialnet.UserItem
@@ -63,7 +63,7 @@ func (db *UserFollow) Followers(username string) ([]socialnet.UserItem, error) {
 // Following returns a the user's a user is following
 func (db *UserFollow) Following(username string) ([]socialnet.UserItem, error) {
 	q := `SELECT username, first_name, last_name, image_url FROM users WHERE id IN(
-		SELECT followee_id FROM follow WHERE follower_id = (
+		SELECT followee_id FROM follows WHERE follower_id = (
 		SELECT id FROM users WHERE username = $1))`
 
 	var uu []socialnet.UserItem
@@ -77,7 +77,7 @@ func (db *UserFollow) Following(username string) ([]socialnet.UserItem, error) {
 
 // Unfollow removes a relationship from the UserFollow.
 func (db *UserFollow) Unfollow(follower, followee string) error {
-	q := `DELETE FROM follow WHERE follower_id = (
+	q := `DELETE FROM follows WHERE follower_id = (
 		SELECT id FROM users WHERE username = $1)
 		AND followee_id =(SELECT id FROM users WHERE username = $2)`
 	_, err := db.Exec(q, follower, followee)

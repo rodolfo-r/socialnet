@@ -11,11 +11,27 @@ type Post struct {
 	UserID    string    `json:"-" db:"users_id"`
 	Title     string    `json:"title"`
 	Body      string    `json:"body"`
+	Likes     []Like    `json:"likes" db:"-"`
 }
 
 // PostService stores and retrieves posts.
 type PostService struct {
 	Store PostStorage
+	Like  LikeStorage
+}
+
+// LikeStorage stores and retrieves post likes.
+type LikeStorage interface {
+	Create(username, postID string) error
+	Delete(username, postID string) error
+	List(postID string) ([]Like, error)
+}
+
+// Like is a post's like.
+type Like struct {
+	ID       string `json:"-" db:"id"`
+	PostID   string `json:"postID" db:"post_id"`
+	UserItem `json:"user" db:"-"`
 }
 
 // PostStorage is an interface for
@@ -112,4 +128,5 @@ type Feed []FeedItem
 type FeedItem struct {
 	ProfileImageURL string `json:"imageURL"`
 	Post            `json:"post"`
+	Liked           bool `json:"liked" db:"-"`
 }

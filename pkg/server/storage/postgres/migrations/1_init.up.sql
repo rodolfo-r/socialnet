@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS users(
-  id uuid,
+  id uuid UNIQUE,
   created_at date,
   updated_at date,
-  username VARCHAR NOT NULL,
+  username VARCHAR NOT NULL UNIQUE,
   password VARCHAR NOT NULL,
   email VARCHAR NOT NULL,
   first_name VARCHAR NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS users(
  );
 
 CREATE TABLE IF NOT EXISTS posts(
-  id uuid,
+  id uuid UNIQUE,
   created_at date,
   updated_at date,
   users_id uuid REFERENCES users(id),
