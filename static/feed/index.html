@@ -8,7 +8,7 @@
   </head>
   <body>
     {{ range . }}
-      <div class="post">
+      <div class="post" data-id="{{ .Post.ID }}">
         <a data-id="{{ .Post.Author }}">
           <img class="usr-img" src="{{ .ProfileImageURL }}" alt=""/>
         </a>
@@ -19,7 +19,21 @@
         <h3>{{ .Post.Body }} </h3>
         <h3>{{ .Post.CreatedAt }} </h3>
         <h3>Likes: {{ len .Post.Likes }} </h3>
-        <input data-id="{{ .Post.ID }}" data-liked="{{ .Liked }}" class="like" type="button"></input>
+        <input data-liked="{{ .Liked }}" class="like" type="button"></input>
+        <span>comments: {{ len .Post.Comments }} </span>
+        <div class="comment-list">
+        {{ range .Post.Comments }}
+        <div class="comment-item">
+           <img src="{{ .ImageURL }}"></img>
+           <div class="text"> {{ .Text }} </div>
+           <div class="author"> {{ .Username }} </div>
+        </div>
+        {{ end }}
+        </div>
+        <div class="comment">
+          <input type="text"></input>
+          <input type="button" value="comment"></input>
+        </div>
       </div>
     {{ end }}
     <script defer="defer" src="/static/feed/script.js" charset="utf-8"></script>

@@ -2,3 +2,8 @@
   height: 200px;
   width: auto;
 }
+
+.comment-item img {
+  height: 50px;
+  width: auto;
+}

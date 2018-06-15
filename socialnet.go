@@ -12,12 +12,14 @@ type Post struct {
 	Title     string    `json:"title"`
 	Body      string    `json:"body"`
 	Likes     []Like    `json:"likes" db:"-"`
+	Comments  []Comment `json:"comments" db:"-"`
 }
 
 // PostService stores and retrieves posts.
 type PostService struct {
-	Store PostStorage
-	Like  LikeStorage
+	Store   PostStorage
+	Like    LikeStorage
+	Comment CommentStorage
 }
 
 // LikeStorage stores and retrieves post likes.
@@ -31,7 +33,22 @@ type LikeStorage interface {
 type Like struct {
 	ID       string `json:"-" db:"id"`
 	PostID   string `json:"postID" db:"post_id"`
-	UserItem `json:"user" db:"-"`
+	UserItem `json:"user"`
+}
+
+// CommentStorage stores and retrieves post comments.
+type CommentStorage interface {
+	Create(username, postID, text string) error
+	Delete(username, postID string) error
+	List(postID string) ([]Comment, error)
+}
+
+// Comment is a post comment made by a user.
+type Comment struct {
+	ID       string `json:"id"`
+	PostID   string `json:"postID" db:"post_id"`
+	UserItem `json:"user"`
+	Text     string `json:"text"`
 }
 
 // PostStorage is an interface for

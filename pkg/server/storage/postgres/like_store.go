@@ -52,20 +52,15 @@ func (db *LikeStore) Delete(username, postID string) error {
 
 // List retrieves all of a post's likes.
 func (db *LikeStore) List(postID string) ([]socialnet.Like, error) {
-	q := `SELECT username, image_url, first_name, last_name FROM users WHERE id IN (
-		SELECT liker_id FROM likes WHERE post_id = $1)`
-
-	var uu []socialnet.UserItem
-	err := db.Select(&uu, q, postID)
-	if err != nil {
-		return []socialnet.Like{}, err
-	}
+	q := `SELECT likes.id, likes.post_id, username, image_url, first_name, last_name
+		FROM likes INNER JOIN users
+		ON likes.liker_id = users.id
+		WHERE post_id = $1`
 
 	var likes []socialnet.Like
-	for _, u := range uu {
-		likes = append(likes, socialnet.Like{
-			PostID: postID, UserItem: u,
-		})
+	err := db.Select(&likes, q, postID)
+	if err != nil {
+		return []socialnet.Like{}, err
 	}
 
 	return likes, nil

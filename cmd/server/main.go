@@ -31,7 +31,7 @@ func main() {
 		Store: userStore, Auth: auth.New(userStore, addr, sign), Follow: userFollow,
 	}
 	postSvc := socialnet.PostService{
-		Store: postgres.NewPostStorage(dsn), Like: postgres.NewLikeStorage(dsn),
+		Store: postgres.NewPostStorage(dsn), Like: postgres.NewLikeStorage(dsn), Comment: postgres.NewCommentStorage(dsn),
 	}
 	router := handler.New(usrSvc, postSvc, handler.Options{
 		Log: true, Address: addr, Signature: sign,

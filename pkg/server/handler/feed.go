@@ -36,6 +36,13 @@ func (h *handler) Feed(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			usr.Posts[i].Likes = ll
+
+			cc, err := h.postSvc.Comment.List(usr.Posts[i].ID)
+			if err != nil {
+				serverError(w, err)
+				return
+			}
+			usr.Posts[i].Comments = cc
 			fi := socialnet.FeedItem{
 				ProfileImageURL: usr.ImageURL, Post: usr.Posts[i], Liked: userLikesPost(username, usr.Posts[i]),
 			}
