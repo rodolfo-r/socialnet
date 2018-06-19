@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"testing"
-	"time"
 
 	_ "github.com/golang-migrate/migrate/source/file"
 	_ "github.com/lib/pq"
@@ -37,7 +36,7 @@ func TestPostStore(t *testing.T) {
 		log.Fatal(err)
 	}
 	post = socialnet.Post{
-		CreatedAt: time.Now(), Author: user.Username, Title: "Octopus's Garden",
+		Author: user.Username, Title: "Octopus's Garden",
 		Body: "I'd like to be. Under the sea. In an post' garden. In the shade.",
 	}
 }
@@ -51,10 +50,11 @@ func TestPostStoreCreate(t *testing.T) {
 	if err := validatePost(p, post); err != nil {
 		t.Errorf("error validating post: %s", err)
 	}
+	post.ID = p.ID
 }
 
 func TestPostStoreRead(t *testing.T) {
-	p, err := postStore.Read(post.Author, post.Title)
+	p, err := postStore.Read(post.ID)
 	if err != nil {
 		t.Error(err)
 	}
@@ -66,7 +66,7 @@ func TestPostStoreRead(t *testing.T) {
 
 func TestPostStoreUpdate(t *testing.T) {
 	post.Body = "He'd let us in. Knows where we've been. In his post' garden. In the shade."
-	p, err := postStore.Update(post.Author, post.Title, post)
+	p, err := postStore.Update(post.ID, post)
 	if err != nil {
 		t.Error(err)
 	}
@@ -77,7 +77,7 @@ func TestPostStoreUpdate(t *testing.T) {
 }
 
 func TestPostStoreDelete(t *testing.T) {
-	err := postStore.Delete(post.Author, post.Title)
+	err := postStore.Delete(post.ID)
 	if err != nil {
 		t.Error(err)
 	}

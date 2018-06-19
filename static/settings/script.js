@@ -8,6 +8,13 @@ document.querySelector('#change-profile .submit').addEventListener('click', asyn
   const xhr = new XMLHttpRequest()
   xhr.open('post', 'http://localhost:3001/profile-picture', true)
   xhr.setRequestHeader('Authorization', `Bearer ${authToken}`)
+  xhr.addEventListener('load', () => {
+    window.location.reload()
+  })
+  xhr.addEventListener('error', evt => {
+    window.location.reload()
+    console.error(evt)
+  })
   xhr.send(formData)
 })
 

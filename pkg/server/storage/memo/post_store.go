@@ -23,46 +23,43 @@ func (ps *PostStorage) Create(post socialnet.Post) (socialnet.Post, error) {
 }
 
 // Read retrieves a Post from the in memory array in PostStorage.
-func (ps *PostStorage) Read(author, title string) (socialnet.Post, error) {
+func (ps *PostStorage) Read(id string) (socialnet.Post, error) {
 	for _, p := range ps.posts {
-		if p.Author == author && p.Title == title {
+		if p.ID == id {
 			return p, nil
 		}
 	}
 	return socialnet.Post{}, fmt.Errorf(
-		"could not find post titled: %s from %s",
-		title,
-		author,
+		"could not find post with ID %s",
+		id,
 	)
 }
 
 // Update replaces a Post from the in memory array in PostStorage.
-func (ps *PostStorage) Update(author, title string, post socialnet.Post) (socialnet.Post, error) {
+func (ps *PostStorage) Update(id string, post socialnet.Post) (socialnet.Post, error) {
 	for i := range ps.posts {
-		if ps.posts[i].Author == author && ps.posts[i].Title == title {
+		if ps.posts[i].ID == id {
 			ps.posts[i] = post
 			return ps.posts[i], nil
 		}
 	}
 	return socialnet.Post{}, fmt.Errorf(
-		"could not find post titled: %s from: %s",
-		title,
-		author,
+		"could not find post with ID %s",
+		id,
 	)
 }
 
 // Delete removes a Post from the in memory array in PostStorage.
-func (ps *PostStorage) Delete(author, title string) error {
+func (ps *PostStorage) Delete(id string) error {
 	for i := range ps.posts {
-		if ps.posts[i].Title == title && ps.posts[i].Author == author {
+		if ps.posts[i].ID == id {
 			ps.posts = append(ps.posts[:i], ps.posts[i+1:]...)
 			return nil
 		}
 	}
 	return fmt.Errorf(
-		"could not find post titled: %s from: %s",
-		title,
-		author,
+		"could not find post with ID %s",
+		id,
 	)
 }
 

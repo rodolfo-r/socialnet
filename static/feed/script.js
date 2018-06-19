@@ -1,6 +1,6 @@
 const authToken = getCookie('socialnet_token')
 
-Array.from(document.querySelectorAll('.post a')).forEach(el => {
+Array.from(document.querySelectorAll('a')).forEach(el => {
   el.href = `/user/${el.getAttribute('data-id')}`
 })
 

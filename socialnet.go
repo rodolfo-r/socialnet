@@ -2,13 +2,24 @@ package socialnet
 
 import "time"
 
+// PostStorage is an interface for
+// storing and retrieving posts.
+type PostStorage interface {
+	Create(Post) (Post, error)
+	Read(id string) (Post, error)
+	Update(id string, newPost Post) (Post, error)
+	Delete(id string) error
+	List(username string) ([]Post, error)
+}
+
 // Post is a post submission.
 type Post struct {
 	ID        string    `json:"id" db:"id"`
 	CreatedAt time.Time `json:"createdAt" db:"created_at"`
 	UpdatedAt time.Time `json:"updatedAt" db:"updated_at"`
-	Author    string    `json:"author"`
+	Author    string    `json:"author" db:"username"`
 	UserID    string    `json:"-" db:"users_id"`
+	ImageURL  string    `json:"imageURL" db:"image_url"`
 	Title     string    `json:"title"`
 	Body      string    `json:"body"`
 	Likes     []Like    `json:"likes" db:"-"`
@@ -45,20 +56,11 @@ type CommentStorage interface {
 
 // Comment is a post comment made by a user.
 type Comment struct {
-	ID       string `json:"id"`
-	PostID   string `json:"postID" db:"post_id"`
-	UserItem `json:"user"`
-	Text     string `json:"text"`
-}
-
-// PostStorage is an interface for
-// storing and retrieving posts.
-type PostStorage interface {
-	Create(Post) (Post, error)
-	Read(username, title string) (Post, error)
-	Update(username, title string, newPost Post) (Post, error)
-	Delete(username, title string) error
-	List(username string) ([]Post, error)
+	ID        string `json:"id"`
+	CreatedAt string `json:"createdAt" db:"created_at"`
+	PostID    string `json:"postID" db:"post_id"`
+	UserItem  `json:"user"`
+	Text      string `json:"text"`
 }
 
 // User is a social network user.

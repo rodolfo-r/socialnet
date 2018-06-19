@@ -2,6 +2,8 @@ package postgres
 
 import (
 	"errors"
+	"log"
+	"strconv"
 	"time"
 
 	"github.com/jmoiron/sqlx"
@@ -21,8 +23,8 @@ func NewPostStorage(dsn string) *PostStorage {
 
 // Create adds a Post to the database.
 func (db *PostStorage) Create(post socialnet.Post) (socialnet.Post, error) {
-	q := `INSERT INTO posts(id, created_at, updated_at, users_id, title, body)
-		VALUES ($1, $2, $3, $4, $5, $6)`
+	q := `INSERT INTO posts(id, created_at, updated_at, users_id, title, body, image_url)
+		VALUES ($1, $2, $3, $4, $5, $6, $7)`
 
 	id, err := uuid.NewV4()
 	if err != nil {
@@ -35,10 +37,10 @@ func (db *PostStorage) Create(post socialnet.Post) (socialnet.Post, error) {
 	userStore := UserStorage{db.DB}
 	usr, err := userStore.Read(post.Author)
 	if err != nil {
-		return socialnet.Post{}, errors.New("could not find user with username: " + post.Author)
+		return socialnet.Post{}, errors.New("could not find user with username: " + post.Author + ": " + err.Error())
 	}
 
-	_, err = db.Exec(q, post.ID, createdAt, createdAt, usr.ID, post.Title, post.Body)
+	_, err = db.Exec(q, post.ID, createdAt, createdAt, usr.ID, post.Title, post.Body, post.ImageURL)
 	if err != nil {
 		return socialnet.Post{}, err
 	}
@@ -47,24 +49,30 @@ func (db *PostStorage) Create(post socialnet.Post) (socialnet.Post, error) {
 }
 
 // Read retrieves a Post from the database.
-func (db *PostStorage) Read(username, title string) (socialnet.Post, error) {
-	q := "SELECT * FROM posts WHERE title = $1 AND users_id = (SELECT id FROM users WHERE username = $2)"
+func (db *PostStorage) Read(id string) (socialnet.Post, error) {
+	q := `SELECT posts.id, posts.created_at, posts.updated_at, title, body, username, image_url	FROM posts
+		INNER JOIN users
+		ON posts.users_id = users.id
+		WHERE posts.id = $1`
 	var post socialnet.Post
 
-	err := db.Get(&post, q, title, username)
+	err := db.Get(&post, q, id)
 	if err != nil {
 		return socialnet.Post{}, err
 	}
-	post.Author = username
 
 	return post, nil
 }
 
 // Update replaces a Post from the database.
-func (db *PostStorage) Update(username, title string, post socialnet.Post) (socialnet.Post, error) {
+func (db *PostStorage) Update(id string, post socialnet.Post) (socialnet.Post, error) {
 	params, vals, args := getParamsValsArgsFromPost(post)
-	q := "UPDATE posts SET (" + params + ") = (" + vals + ") WHERE title = '$1'" +
-		"AND users_id = (SELECT id FROM users WHERE username = '$2')"
+	q := "UPDATE posts SET " + params + " = " + vals + " WHERE id = $" + strconv.Itoa(len(args)+1)
+	log.Println("update query: ", q)
+
+	var interID interface{} = id
+	args = append(args, interID)
+
 	_, err := db.Exec(q, args...)
 	if err != nil {
 		return socialnet.Post{}, err
@@ -74,11 +82,10 @@ func (db *PostStorage) Update(username, title string, post socialnet.Post) (soci
 }
 
 // Delete removes a Post from the database.
-func (db *PostStorage) Delete(username, title string) error {
-	q := `DELETE FROM posts WHERE title = $1
-		AND users_id = (SELECT id FROM users WHERE username = $2)`
+func (db *PostStorage) Delete(id string) error {
+	q := "DELETE FROM posts WHERE id = $1"
 
-	_, err := db.Exec(q, title, username)
+	_, err := db.Exec(q, id)
 	if err != nil {
 		return err
 	}
@@ -110,6 +117,15 @@ func getParamsValsArgsFromPost(post socialnet.Post) (params, vals string, args [
 
 	if post.Body != "" {
 		params, vals, args = appendParamsAndArgs("body", post.Body, params, vals, args)
+	}
+
+	if post.ImageURL != "" {
+		params, vals, args = appendParamsAndArgs("image_url", post.ImageURL, params, vals, args)
+	}
+
+	if len(args) > 1 {
+		params = "(" + params + ")"
+		vals = "(" + vals + ")"
 	}
 
 	return params, vals, args

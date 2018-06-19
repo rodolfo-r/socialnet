@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS users(
   id uuid UNIQUE,
-  created_at date,
-  updated_at date,
+  created_at timestamp,
+  updated_at timestamp,
   username VARCHAR NOT NULL UNIQUE,
   password VARCHAR NOT NULL,
   email VARCHAR NOT NULL,
@@ -12,8 +12,8 @@ CREATE TABLE IF NOT EXISTS users(
 
 CREATE TABLE IF NOT EXISTS posts(
   id uuid UNIQUE,
-  created_at date,
-  updated_at date,
+  created_at timestamp,
+  updated_at timestamp,
   users_id uuid REFERENCES users(id),
   title VARCHAR NOT NULL,
   body VARCHAR NOT NULL

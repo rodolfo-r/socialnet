@@ -3,6 +3,7 @@ package postgres
 import (
 	"database/sql"
 	"log"
+	"strconv"
 
 	"github.com/golang-migrate/migrate"
 	migpg "github.com/golang-migrate/migrate/database/postgres"
@@ -58,4 +59,15 @@ func MigrateDown(pathToMigs, dsn string) {
 		log.Println("error applying down migrations: ", err)
 	}
 
+}
+
+func appendParamsAndArgs(col, val, params, vals string, args []interface{}) (newParams, newVals string, newArgs []interface{}) {
+	args = append(args, val)
+	if len(args) > 1 {
+		params += ", "
+		vals += ", "
+	}
+	params += col
+	vals += "$" + strconv.Itoa(len(args))
+	return params, vals, args
 }

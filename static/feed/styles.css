@@ -1,9 +1,28 @@
+.post-container {
+  margin: 60px;
+  padding 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.post {
+  width: 700px;
+  display: inline-block; 
+  border: thin solid;
+}
+
 .usr-img {
-  height: 200px;
+  height: 100px;
+  border-radius: 50%;
   width: auto;
 }
 
 .comment-item img {
   height: 50px;
   width: auto;
+}
+
+.post-img {
+  height: auto;
+  width: 100%;
 }

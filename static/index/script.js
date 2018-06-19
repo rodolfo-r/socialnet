@@ -20,10 +20,11 @@ const addClickListener = form => {
         }),
         body: JSON.stringify(postData)
       })
+      .catch(console.error)
       .then(res => res.json())
       .then(json => json.token)
     } catch (err) {
-      alert(err)
+      console.error(err)
       return
     }
 

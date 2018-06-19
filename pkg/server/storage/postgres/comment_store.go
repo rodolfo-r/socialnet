@@ -1,6 +1,8 @@
 package postgres
 
 import (
+	"time"
+
 	"github.com/jmoiron/sqlx"
 	"github.com/satori/go.uuid"
 	"github.com/techmexdev/socialnet"
@@ -26,13 +28,15 @@ func (db *CommentStore) Create(username, postID, text string) error {
 		return err
 	}
 
-	q = "INSERT INTO comments(id, post_id, commenter_id, text) VALUES ($1, $2, $3, $4)"
+	q = "INSERT INTO comments(id, post_id, commenter_id, text, created_at) VALUES ($1, $2, $3, $4, $5)"
 	id, err := uuid.NewV4()
 	if err != nil {
 		return err
 	}
 
-	_, err = db.Exec(q, id, postID, user.ID, text)
+	createdAt := time.Now().Format(time.RFC3339)
+
+	_, err = db.Exec(q, id, postID, user.ID, text, createdAt)
 	if err != nil {
 		return err
 	}
@@ -50,10 +54,11 @@ func (db *CommentStore) Delete(username, postID string) error {
 
 // List retrieves all of a post's cc.
 func (db *CommentStore) List(postID string) ([]socialnet.Comment, error) {
-	q := `SELECT comments.text, username, first_name, last_name, image_url
+	q := `SELECT comments.text, username, first_name, last_name, image_url, comments.created_at
 		FROM comments INNER JOIN users
 		ON users.id = comments.commenter_id  
-		WHERE comments.post_id = $1`
+		WHERE comments.post_id = $1
+		ORDER BY comments.created_at ASC`
 
 	var cc []socialnet.Comment
 	err := db.Select(&cc, q, postID)

@@ -136,13 +136,3 @@ func getParamsValsArgsFromUser(usr socialnet.User) (params, vals string, args []
 	return params, vals, args
 }
 
-func appendParamsAndArgs(col, val, params, vals string, args []interface{}) (newParams, newVals string, newArgs []interface{}) {
-	args = append(args, val)
-	if len(args) > 1 {
-		params += ", "
-		vals += ", "
-	}
-	params += col
-	vals += "$" + strconv.Itoa(len(args))
-	return params, vals, args
-}

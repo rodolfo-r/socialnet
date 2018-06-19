@@ -19,8 +19,11 @@
     <div id="posts">
       <h2>Posts: </h2>
       {{ range .Posts }}
-      <h3>{{ .Title }} </h3> 
-      <p> {{ .Body }} </p>
+      <div class="post">
+        <h3>{{ .Title }} </h3> 
+        <p> {{ .Body }} </p>
+        <img src="{{ .ImageURL }}" />
+      </div>
       {{ end }}
     </div>
     <div>
@@ -28,6 +31,7 @@
         <h2>New Post:</h2>
         <input type="text" class="title"></input>
         <textarea class="body" height="300px"></textarea>
+        Upload image: <input type="file" class="pic"></input>
         <input type="button" class="submit" value="submit"></input>
       </div>
     </div>

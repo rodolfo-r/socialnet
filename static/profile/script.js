@@ -1,9 +1,11 @@
 let followBtn = document.querySelector('#follow')
+const authToken = getCookie('socialnet_token')
+const postEl = document.querySelector('#new-post')
 const profileUser = document.URL.split('/')[document.URL.split('/').length -1]
-
 const loggedUser = parseJwt(getCookie('socialnet_token')).usn
+
 if (loggedUser !== profileUser) {
-  document.querySelector('#follow').type = "button"
+  followBtn.type = "button"
 }
 
 const isFollower = document.querySelector('#follow').getAttribute('data-id')
@@ -13,48 +15,8 @@ if (isFollower === 'true') {
   followBtn.value = "Follow"
 }
 
-document.querySelector('#new-post .submit').addEventListener('click', async () => {
- const title = document.querySelector('#new-post .title').value 
- const body = document.querySelector('#new-post .body').value 
-
- const authToken = getCookie('socialnet_token')
-  try {
-   await fetch('http://localhost:3001/submit-post', {
-    method: 'post',
-    headers: new Headers({
-      'Content-Type': 'Application/json',
-      'Authorization': 'Bearer ' + authToken
-    }),
-     body: JSON.stringify({ title: title, body: body })
-   })
-  } catch (e) {
-    alert(e)
-    return
-  }
-
-  window.location.reload()
-})
-
-followBtn.addEventListener('click', async () => {
-  const shouldFollow = followBtn.value.toLowerCase() === "follow"
-
-  const authToken = getCookie('socialnet_token')
-  try {
-    await fetch(`http://localhost:3001/${shouldFollow ? '' : 'un'}follow`, {
-      method: 'post',
-      headers: new Headers({
-        'Content-Type': 'Application/json',
-        'Authorization': 'Bearer ' + authToken
-      }),
-      body: JSON.stringify({ username: profileUser })
-   })
-  } catch (e) {
-    alert(e)
-    return
-  }
-
-  window.location.reload()
-})
+addFollowListener(followBtn)
+addPostListener(postEl)
 
 function getCookie(name) {
   const value = '; ' + document.cookie;
@@ -66,4 +28,50 @@ function parseJwt (token) {
   const base64Url = token.split('.')[1]
   const base64 = base64Url.replace('-', '+').replace('_', '/')
   return JSON.parse(window.atob(base64))
+}
+
+function addFollowListener(element) {
+  element.addEventListener('click', async () => {
+    const shouldFollow = element.value.toLowerCase() === "follow"
+
+    try {
+      await fetch(`http://localhost:3001/${shouldFollow ? '' : 'un'}follow`, {
+        method: 'post',
+        headers: new Headers({
+          'Content-Type': 'Application/json',
+          'Authorization': 'Bearer ' + authToken
+        }),
+        body: JSON.stringify({ username: profileUser })
+    })
+    } catch (e) {
+      alert(e)
+      return
+    }
+
+    window.location.reload()
+  })
+}
+
+function addPostListener(newPostEl) {
+  newPostEl.querySelector('.submit').addEventListener('click', async () => {
+    const title = newPostEl.querySelector('.title').value 
+    const body = newPostEl.querySelector('.body').value 
+    const image = newPostEl.querySelector('.pic').files[0]
+
+    const formData = new FormData()
+    formData.append('image', image)
+    formData.append('title', title)
+    formData.append('body', body)
+
+    const xhr = new XMLHttpRequest()
+    xhr.open('post', 'http://localhost:3001/submit-post', true)
+    xhr.setRequestHeader('Authorization', `Bearer ${authToken}`)
+    xhr.addEventListener('load', () => {
+      window.location.reload()
+    })
+    xhr.addEventListener('error', evt => {
+      console.error(evt)
+    })
+    xhr.send(formData)
+  })
 }

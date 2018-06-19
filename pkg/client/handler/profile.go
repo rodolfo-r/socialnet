@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"errors"
 	"html/template"
 	"net/http"
 
@@ -41,6 +42,15 @@ func Profile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if res.StatusCode != 200 {
+		var b []byte
+		_, err := res.Body.Read(b)
+		if err != nil {
+			serverError(w, err)
+			return
+		}
+		serverError(w, errors.New(string(b)))
+	}
 	var prof socialnet.Profile
 	err = json.NewDecoder(res.Body).Decode(&prof)
 	if err != nil {

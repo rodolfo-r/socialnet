@@ -8,6 +8,7 @@
   </head>
   <body>
     {{ range . }}
+    <div class="post-container">
       <div class="post" data-id="{{ .Post.ID }}">
         <a data-id="{{ .Post.Author }}">
           <img class="usr-img" src="{{ .ProfileImageURL }}" alt=""/>
@@ -15,18 +16,17 @@
         <a data-id="{{ .Post.Author }}">
           <h3>{{ .Post.Author }} </h3>
         </a>
+        <img class="post-img" src="{{ .Post.ImageURL }}" alt=""/>
         <h3>{{ .Post.Title }} </h3>
         <h3>{{ .Post.Body }} </h3>
-        <h3>{{ .Post.CreatedAt }} </h3>
-        <h3>Likes: {{ len .Post.Likes }} </h3>
+        <h3>{{ len .Post.Likes }} likes</h3>
         <input data-liked="{{ .Liked }}" class="like" type="button"></input>
-        <span>comments: {{ len .Post.Comments }} </span>
         <div class="comment-list">
         {{ range .Post.Comments }}
         <div class="comment-item">
            <img src="{{ .ImageURL }}"></img>
-           <div class="text"> {{ .Text }} </div>
-           <div class="author"> {{ .Username }} </div>
+           <a data-id="{{ .Username }}"><span class="author">@{{ .Username }}: <span></a>
+           <span class="text"> {{ .Text }}</span>
         </div>
         {{ end }}
         </div>
@@ -35,6 +35,7 @@
           <input type="button" value="comment"></input>
         </div>
       </div>
+    </div>
     {{ end }}
     <script defer="defer" src="/static/feed/script.js" charset="utf-8"></script>
   </body>

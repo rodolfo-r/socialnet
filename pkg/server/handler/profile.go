@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"log"
 	"net/http"
 	"strings"
 
@@ -10,8 +11,15 @@ import (
 
 func (h *handler) Profile(w http.ResponseWriter, r *http.Request) {
 	un := mux.Vars(r)["username"]
+	log.Println("un: ", un)
 	usr, err := h.userSvc.Store.Read(un)
+	if err != nil {
+		log.Print(err)
+		http.NotFound(w, r)
+		return
+	}
 
+	log.Printf("usr = %+v\n", usr)
 	prof := &socialnet.Profile{
 		Username:  usr.Username,
 		ImageURL:  usr.ImageURL,
@@ -29,18 +37,21 @@ func (h *handler) Profile(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 		return
 	}
+	log.Printf("followers = %+v\n", followers)
 
 	following, err := h.userSvc.Follow.Following(usr.Username)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 		return
 	}
+	log.Printf("following = %+v\n", following)
 
 	prof.Followers = followers
 	prof.Following = following
 
 	token := strings.Replace(r.Header.Get("Authorization"), "Bearer ", "", -1)
 	loggedInUsr, _ := h.userSvc.Auth.ValidateToken(token)
+	log.Printf("loggedInUsr = %+v\n", loggedInUsr)
 
 	for _, f := range followers {
 		if f.Username == loggedInUsr {
