@@ -1,6 +1,9 @@
 package socialnet
 
-import "time"
+import (
+	"sort"
+	"time"
+)
 
 // PostStorage is an interface for
 // storing and retrieving posts.
@@ -139,9 +142,12 @@ type UserItem struct {
 	LastName  string `json:"lastName" db:"last_name"`
 }
 
-// Feed is a collection of a user's following
-// list posts
-type Feed []FeedItem
+// Feed is a sortable collection
+// of a user's following list posts.
+type Feed interface {
+	sort.Interface
+	List() []FeedItem
+}
 
 // FeedItem is a user post
 type FeedItem struct {
