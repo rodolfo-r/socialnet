@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  {{ template "head.html" "feed" }}
+  <body>
+  {{ template "header.html" }}
+  <div id="page-container">
+
+    <div class="dashboard">
+    </div>
+
+    <div id="timeline">
+      <div id="tweet-box">
+        <input type="text" class="title" placeholder="What's on your mind?" />  
+        <input type="file" value="" class="pic" id=""/> 
+        <button>Submit</button> 
+      </div>
+      {{ range . }}
+      <div class="post-container">
+        <div class="post" data-id="{{ .Post.ID }}">
+          <a data-id="{{ .Post.Author }}">
+            <img class="usr-img" src="{{ .ProfileImageURL }}" alt=""/>
+          </a>
+          <a data-id="{{ .Post.Author }}">
+            <h3>{{ .Post.Author }} </h3>
+          </a>
+          <img class="post-img" src="{{ .Post.ImageURL }}" alt=""/>
+          <h3>{{ .Post.Title }} </h3>
+          <h3>{{ .Post.CreatedAt }} </h3>
+          <h3>{{ .Post.Body }} </h3>
+          <h3>{{ len .Post.Likes }} likes</h3>
+          <input data-liked="{{ .Liked }}" class="like" type="button"></input>
+          <div class="comment-list">
+          {{ range .Post.Comments }}
+          <div class="comment-item">
+            <img src="{{ .ImageURL }}"></img>
+            <a data-id="{{ .Username }}"><span class="author">@{{ .Username }}: <span></a>
+            <span class="text"> {{ .Text }}</span>
+          </div>
+          {{ end }}
+          </div>
+          <div class="comment">
+            <input type="text"></input>
+            <input type="button" value="comment"></input>
+          </div>
+        </div>
+      </div>
+      {{ end }}
+    </div>
+
+    <div class="dashboard">
+    </div>
+  </div>
+    <script defer="defer" src="/static/feed/script.js" charset="utf-8"></script>
+    {{ template "footer.html" }}
+  </body>
+</html>

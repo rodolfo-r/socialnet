@@ -1,12 +1,8 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>Profile</title>
-    <link rel="stylesheet" href="/static/profile/styles.css" type="text/css" media="all" />
-  </head>
+  {{ template "head.html" "profile" }}
   <body>
+  {{ template "header.html" }}
     <div id="info">
       <img id="profile-pic" src="{{ .ImageURL }}" src="" alt="profile picture"/>
       <h2>Username: {{ .Username }}</h2>
@@ -36,5 +32,6 @@
       </div>
     </div>
     <script defer="defer" src="/static/profile/script.js" charset="utf-8"></script>
+    {{ template "footer.html" }}
   </body>
 </html>

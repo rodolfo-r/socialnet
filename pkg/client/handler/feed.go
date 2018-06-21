@@ -2,7 +2,7 @@ package handler
 
 import (
 	"encoding/json"
-	"html/template"
+	"fmt"
 	"net/http"
 
 	"github.com/techmexdev/socialnet"
@@ -11,40 +11,38 @@ import (
 // Feed sends the 'socialnet_token' as an auth
 // token to the api server, and responds with an html template.
 // responds with a template with the response data.
-func Feed(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles("./static/feed/index.html")
-	if err != nil {
-		serverError(w, err)
-		return
-	}
-
+func (h *handler) Feed(w http.ResponseWriter, r *http.Request) {
 	apiReq, err := http.NewRequest("GET", "http://localhost:3001/feed", nil)
 	if err != nil {
-		serverError(w, err)
+		serverError(w, fmt.Errorf("failed creating GET localhost:3001/feed request: %s", err))
 		return
 	}
 
 	tokenCookie, err := r.Cookie("socialnet_token")
 	if err != nil {
-		serverError(w, err)
+		serverError(w, fmt.Errorf("failed reading social_net cookie from request: %s", err))
 		return
 	}
 
 	apiReq.Header.Set("Authorization", "Bearer "+tokenCookie.Value)
 
-	client := &http.Client{}
-	res, err := client.Do(apiReq)
+	res, err := h.client.Do(apiReq)
 	if err != nil {
-		serverError(w, err)
+		serverError(w, fmt.Errorf("failed to decode api server res body: %s", err))
 		return
 	}
 
-	var feed socialnet.Feed
+	var feed []socialnet.FeedItem
 	err = json.NewDecoder(res.Body).Decode(&feed)
 	if err != nil {
-		serverError(w, err)
+		serverError(w, fmt.Errorf("failed decoding feed from server api response: %s", err))
 		return
 	}
 
-	t.Execute(w, feed)
+	err = h.template.ExecuteTemplate(w, "feed.html", feed)
+	if err != nil {
+		serverError(w, fmt.Errorf("failed to execute template feed.html: %s", err))
+		return
+	}
+
 }

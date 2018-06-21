@@ -1,3 +1,46 @@
+#page-container {
+  padding: 56px 14px 15px;
+  position: relative;
+  width: 1190px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.dashboard {
+  float: left;
+  width: 290px;
+  border: thin solid;
+}
+
+#timeline {
+  float: left;
+  width: 590px;
+  margin: 20px auto;
+}
+
+#tweet-box {
+  position: relative;
+  background-color: #E8EAEA;
+  padding: 10px 12px;
+  display: flex;
+}
+
+#tweet-box input[type=text] {
+  width: 80%;
+  overflow-y: auto;
+}
+
+#tweet-box input[type=file] {
+  margin: auto;
+}
+
+#tweet-box button {
+  height: 20px;
+  border: thin solid;
+  margin: auto;
+}
+
+
 .post-container {
   margin: 60px;
   padding 20px;

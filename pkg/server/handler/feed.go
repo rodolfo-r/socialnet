@@ -77,7 +77,7 @@ func (f feed) Len() int {
 }
 
 func (f feed) Less(i, j int) bool {
-	return f.items[i].CreatedAt.Before(f.items[j].CreatedAt)
+	return f.items[i].CreatedAt.After(f.items[j].CreatedAt)
 }
 
 func (f feed) Swap(i, j int) {

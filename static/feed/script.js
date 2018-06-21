@@ -1,5 +1,6 @@
 const authToken = getCookie('socialnet_token')
 
+// Link user's name and image to their profile.
 Array.from(document.querySelectorAll('a')).forEach(el => {
   el.href = `/user/${el.getAttribute('data-id')}`
 })
@@ -19,6 +20,7 @@ Array.from(document.querySelectorAll('.post')).forEach(el => {
   addCommentListener(commentButton, commentText, postID)
 })
 
+addPostListener(document.querySelector('#tweet-box'))
 function getCookie(name) {
   const value = '; ' + document.cookie;
   const parts = value.split('; ' + name + '=')
@@ -47,7 +49,7 @@ function addLikeListener(element, postID) {
   })
 }
 
-function addCommentListener(buttonEl, textEl, postID) {
+function addCommentListener(buttonEl, inputEl, postID) {
   buttonEl.addEventListener('click', async () => {
     try {
      await fetch('http://localhost:3001/comment', {
@@ -58,7 +60,7 @@ function addCommentListener(buttonEl, textEl, postID) {
        }),
        body: JSON.stringify({ 
          postID: postID,
-         text: textEl.value
+         text: intputEl.value
        })
      }).then(console.log)
     } catch (e) {
@@ -66,5 +68,27 @@ function addCommentListener(buttonEl, textEl, postID) {
     }
 
     window.location.reload()
+  })
+}
+
+function addPostListener(newPostEl) {
+  newPostEl.querySelector('button').addEventListener('click', async () => {
+    const title = newPostEl.querySelector('.title').value 
+    const image = newPostEl.querySelector('.pic').files[0]
+
+    const formData = new FormData()
+    formData.append('image', image)
+    formData.append('title', title)
+
+    const xhr = new XMLHttpRequest()
+    xhr.open('post', 'http://localhost:3001/submit-post', true)
+    xhr.setRequestHeader('Authorization', `Bearer ${authToken}`)
+    xhr.addEventListener('load', () => {
+      window.location.reload()
+    })
+    xhr.addEventListener('error', evt => {
+      console.error(evt)
+    })
+    xhr.send(formData)
   })
 }

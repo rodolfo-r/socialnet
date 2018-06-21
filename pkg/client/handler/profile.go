@@ -3,7 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"errors"
-	"html/template"
+	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -13,13 +13,7 @@ import (
 // Profile sends the 'socialnet_token' as an auth
 // token to the api server, and responds with an html template.
 // responds with a template with the response data.
-func Profile(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles("./static/profile/index.html")
-	if err != nil {
-		serverError(w, err)
-		return
-	}
-
+func (h *handler) Profile(w http.ResponseWriter, r *http.Request) {
 	username := mux.Vars(r)["username"]
 	apiReq, err := http.NewRequest("GET", "http://localhost:3001/user/"+username, nil)
 	if err != nil {
@@ -58,5 +52,9 @@ func Profile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	t.Execute(w, prof)
+	err = h.template.ExecuteTemplate(w, "profile.html", prof)
+	if err != nil {
+		serverError(w, fmt.Errorf("failed to execute template profile.html: %s", err))
+		return
+	}
 }
