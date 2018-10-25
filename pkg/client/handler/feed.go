@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/techmexdev/socialnet"
+	"github.com/rodolfo-r/socialnet"
 )
 
 // Feed sends the 'socialnet_token' as an auth

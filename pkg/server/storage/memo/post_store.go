@@ -3,7 +3,7 @@ package memo
 import (
 	"fmt"
 
-	"github.com/techmexdev/socialnet"
+	"github.com/rodolfo-r/socialnet"
 )
 
 // PostStorage is an in-memory user storage.

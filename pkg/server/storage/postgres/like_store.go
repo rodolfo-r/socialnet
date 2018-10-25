@@ -3,7 +3,7 @@ package postgres
 import (
 	"github.com/jmoiron/sqlx"
 	uuid "github.com/satori/go.uuid"
-	"github.com/techmexdev/socialnet"
+	"github.com/rodolfo-r/socialnet"
 )
 
 // LikeStore is an implementation of socialnet.LikeStorage.

@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/techmexdev/socialnet"
+	"github.com/rodolfo-r/socialnet"
 	"github.com/unrolled/render"
 )
 

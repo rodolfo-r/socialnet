@@ -8,7 +8,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	uuid "github.com/satori/go.uuid"
-	"github.com/techmexdev/socialnet"
+	"github.com/rodolfo-r/socialnet"
 )
 
 // UserStorage is an in-memory socialnet.UserStorage.

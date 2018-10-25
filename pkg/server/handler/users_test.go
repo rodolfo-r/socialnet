@@ -7,11 +7,11 @@ import (
 
 	"encoding/json"
 
-	"github.com/techmexdev/handlertest"
-	"github.com/techmexdev/socialnet"
-	"github.com/techmexdev/socialnet/pkg/server/auth"
-	"github.com/techmexdev/socialnet/pkg/server/handler"
-	"github.com/techmexdev/socialnet/pkg/server/storage/memo"
+	"github.com/rodolfo-r/handlertest"
+	"github.com/rodolfo-r/socialnet"
+	"github.com/rodolfo-r/socialnet/pkg/server/auth"
+	"github.com/rodolfo-r/socialnet/pkg/server/handler"
+	"github.com/rodolfo-r/socialnet/pkg/server/storage/memo"
 )
 
 func TestUsersEmpty(t *testing.T) {

@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/techmexdev/socialnet"
+	"github.com/rodolfo-r/socialnet"
 )
 
 // Profile sends the 'socialnet_token' as an auth

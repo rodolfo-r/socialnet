@@ -6,9 +6,9 @@ import (
 
 	_ "github.com/golang-migrate/migrate/source/file"
 	_ "github.com/lib/pq"
-	"github.com/techmexdev/socialnet"
-	"github.com/techmexdev/socialnet/pkg/server/storage/memo"
-	"github.com/techmexdev/socialnet/pkg/server/storage/postgres"
+	"github.com/rodolfo-r/socialnet"
+	"github.com/rodolfo-r/socialnet/pkg/server/storage/memo"
+	"github.com/rodolfo-r/socialnet/pkg/server/storage/postgres"
 )
 
 var commentStore socialnet.CommentStorage

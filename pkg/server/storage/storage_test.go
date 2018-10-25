@@ -4,7 +4,7 @@ import (
 	"flag"
 	"os"
 
-	"github.com/techmexdev/socialnet/pkg/server/storage/postgres"
+	"github.com/rodolfo-r/socialnet/pkg/server/storage/postgres"
 )
 
 var testMemo bool

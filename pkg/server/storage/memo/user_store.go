@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/techmexdev/socialnet"
+	"github.com/rodolfo-r/socialnet"
 	"golang.org/x/crypto/bcrypt"
 )
 

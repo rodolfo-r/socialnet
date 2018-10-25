@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/techmexdev/socialnet"
+	"github.com/rodolfo-r/socialnet"
 )
 
 // ProfilePicture saves jpg files to the file system.

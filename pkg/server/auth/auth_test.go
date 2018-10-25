@@ -3,9 +3,9 @@ package auth_test
 import (
 	"testing"
 
-	"github.com/techmexdev/socialnet"
-	"github.com/techmexdev/socialnet/pkg/server/auth"
-	"github.com/techmexdev/socialnet/pkg/server/storage/memo"
+	"github.com/rodolfo-r/socialnet"
+	"github.com/rodolfo-r/socialnet/pkg/server/auth"
+	"github.com/rodolfo-r/socialnet/pkg/server/storage/memo"
 )
 
 func TestValidateCreds(t *testing.T) {

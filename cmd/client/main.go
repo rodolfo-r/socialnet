@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/techmexdev/socialnet/pkg/client/handler"
+	"github.com/rodolfo-r/socialnet/pkg/client/handler"
 )
 
 func main() {

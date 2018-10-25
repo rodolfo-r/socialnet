@@ -1,7 +1,7 @@
 package memo
 
 import (
-	"github.com/techmexdev/socialnet"
+	"github.com/rodolfo-r/socialnet"
 )
 
 // LikeStore is an implementation of socialnet.LikeStorage.

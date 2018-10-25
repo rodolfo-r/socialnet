@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/techmexdev/socialnet"
+	"github.com/rodolfo-r/socialnet"
 )
 
 func (h *handler) SubmitPost(w http.ResponseWriter, r *http.Request) {

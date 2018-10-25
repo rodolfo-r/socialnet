@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/techmexdev/socialnet"
+	"github.com/rodolfo-r/socialnet"
 )
 
 func (h *handler) Settings(w http.ResponseWriter, r *http.Request) {

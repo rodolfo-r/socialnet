@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/techmexdev/socialnet"
+	"github.com/rodolfo-r/socialnet"
 )
 
 // Signup creates user in storage, and responds with auth token
