@@ -71,20 +71,10 @@
 }
 
 #header-profile {
-  height: 46px;
-}
-
-#header-profile a {
-  height: 44px;
-  float: right;
-  margin-right: 50px;
+  margin-right: 12px;
 }
 
 #header-profile img {
-  margin: auto;
-  display: block;
   height: 80%;
-  width: auto;
-  margin: auto;
   border-radius: 25%;
 }
