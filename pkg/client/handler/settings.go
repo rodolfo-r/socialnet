@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"html/template"
 	"net/http"
 
 	"github.com/rodolfo-r/socialnet"
@@ -11,12 +10,6 @@ import (
 // Settings sends the 'socialnet_token' as an auth
 // token to the api server, and responds with an html template.
 func (h *handler) Settings(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles("./static/settings/index.html")
-	if err != nil {
-		serverError(w, err)
-		return
-	}
-
 	apiReq, err := http.NewRequest("GET", "http://localhost:3001/settings", nil)
 	if err != nil {
 		serverError(w, err)
@@ -46,5 +39,9 @@ func (h *handler) Settings(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	t.Execute(w, set)
+	err = h.template.ExecuteTemplate(w, "settings.html", set)
+	if err != nil {
+		serverError(w, err)
+		return
+	}
 }

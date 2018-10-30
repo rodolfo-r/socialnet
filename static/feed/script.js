@@ -1,7 +1,7 @@
 const authToken = getCookie('socialnet_token')
 
 // Link user's name and image to their profile.
-Array.from(document.querySelectorAll('a')).forEach(el => {
+Array.from(document.querySelectorAll('.post a')).forEach(el => {
   el.href = `/user/${el.getAttribute('data-id')}`
 })
 
@@ -20,12 +20,13 @@ Array.from(document.querySelectorAll('.post')).forEach(el => {
   addCommentListener(commentButton, commentText, postID)
 })
 
-addPostListener(document.querySelector('#tweet-box'))
 function getCookie(name) {
   const value = '; ' + document.cookie;
   const parts = value.split('; ' + name + '=')
   return parts.length == 2 ? parts.pop().split(';').shift() : ''
 }
+
+addPostListener(document.querySelector('#tweet-box'))
 
 function addLikeListener(element, postID) {
   element.addEventListener('click', async () => {
@@ -50,7 +51,9 @@ function addLikeListener(element, postID) {
 }
 
 function addCommentListener(buttonEl, inputEl, postID) {
+  console.log('inputeEl: ', inputEl)
   buttonEl.addEventListener('click', async () => {
+  console.log('fired comment listener', inputEl.value)
     try {
      await fetch('http://localhost:3001/comment', {
        method: 'post',
@@ -60,7 +63,7 @@ function addCommentListener(buttonEl, inputEl, postID) {
        }),
        body: JSON.stringify({ 
          postID: postID,
-         text: intputEl.value
+         text: inputEl.value
        })
      }).then(console.log)
     } catch (e) {

@@ -4,11 +4,10 @@ import (
 	"strconv"
 	"time"
 
-	"golang.org/x/crypto/bcrypt"
-
 	"github.com/jmoiron/sqlx"
-	uuid "github.com/satori/go.uuid"
 	"github.com/rodolfo-r/socialnet"
+	uuid "github.com/satori/go.uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // UserStorage is an in-memory socialnet.UserStorage.
@@ -26,10 +25,7 @@ func (db *UserStorage) Create(usr socialnet.User) (socialnet.User, error) {
 	q := "INSERT INTO users(id, username, image_url, email, password, first_name, last_name, created_at, updated_at)" +
 		" VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)"
 
-	id, err := uuid.NewV4()
-	if err != nil {
-		return socialnet.User{}, err
-	}
+	id := uuid.NewV4()
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(usr.Password), 12)
 	if err != nil {
@@ -135,4 +131,3 @@ func getParamsValsArgsFromUser(usr socialnet.User) (params, vals string, args []
 	}
 	return params, vals, args
 }
-

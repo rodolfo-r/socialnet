@@ -1,9 +1,8 @@
 package handler
 
 import (
-	"net/http"
-
 	"html/template"
+	"net/http"
 
 	"github.com/gorilla/mux"
 )

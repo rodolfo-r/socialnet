@@ -4,8 +4,8 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/satori/go.uuid"
 	"github.com/rodolfo-r/socialnet"
+	"github.com/satori/go.uuid"
 )
 
 // CommentStore is an implementation of socialnet.CommentStorage.
@@ -29,10 +29,7 @@ func (db *CommentStore) Create(username, postID, text string) error {
 	}
 
 	q = "INSERT INTO comments(id, post_id, commenter_id, text, created_at) VALUES ($1, $2, $3, $4, $5)"
-	id, err := uuid.NewV4()
-	if err != nil {
-		return err
-	}
+	id := uuid.NewV4()
 
 	createdAt := time.Now().Format(time.RFC3339)
 

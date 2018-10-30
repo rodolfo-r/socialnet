@@ -2,8 +2,8 @@ package postgres
 
 import (
 	"github.com/jmoiron/sqlx"
-	uuid "github.com/satori/go.uuid"
 	"github.com/rodolfo-r/socialnet"
+	uuid "github.com/satori/go.uuid"
 )
 
 // UserFollow is a postgres follow storage.
@@ -20,10 +20,7 @@ func NewUserFollow(dsn string) *UserFollow {
 func (db *UserFollow) Follow(followerUsername, followeeUsername string) error {
 	q := "INSERT INTO follows (id, follower_id, followee_id) VALUES ($1, $2, $3)"
 
-	id, err := uuid.NewV4()
-	if err != nil {
-		return err
-	}
+	id := uuid.NewV4()
 
 	userStore := UserStorage{db.DB}
 

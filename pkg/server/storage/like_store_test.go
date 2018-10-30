@@ -5,12 +5,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rodolfo-r/socialnet"
-	"github.com/rodolfo-r/socialnet/pkg/server/storage/postgres"
-
 	_ "github.com/golang-migrate/migrate/source/file"
 	_ "github.com/lib/pq"
+	"github.com/rodolfo-r/socialnet"
 	"github.com/rodolfo-r/socialnet/pkg/server/storage/memo"
+	"github.com/rodolfo-r/socialnet/pkg/server/storage/postgres"
 )
 
 var likeStore socialnet.LikeStorage

@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	uuid "github.com/satori/go.uuid"
 	"github.com/rodolfo-r/socialnet"
+	uuid "github.com/satori/go.uuid"
 )
 
 // PostStorage is a postgres user storage.
@@ -26,10 +26,7 @@ func (db *PostStorage) Create(post socialnet.Post) (socialnet.Post, error) {
 	q := `INSERT INTO posts(id, created_at, updated_at, users_id, title, body, image_url)
 		VALUES ($1, $2, $3, $4, $5, $6, $7)`
 
-	id, err := uuid.NewV4()
-	if err != nil {
-		return socialnet.Post{}, err
-	}
+	id := uuid.NewV4()
 
 	post.ID = id.String()
 	createdAt := time.Now().Format(time.RFC3339)

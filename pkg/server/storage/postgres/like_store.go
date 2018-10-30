@@ -2,8 +2,8 @@ package postgres
 
 import (
 	"github.com/jmoiron/sqlx"
-	uuid "github.com/satori/go.uuid"
 	"github.com/rodolfo-r/socialnet"
+	uuid "github.com/satori/go.uuid"
 )
 
 // LikeStore is an implementation of socialnet.LikeStorage.
@@ -28,10 +28,7 @@ func (db *LikeStore) Create(username, postID string) error {
 
 	q = "INSERT INTO likes (id, post_id, liker_id) VALUES ($1, $2, $3)"
 
-	id, err := uuid.NewV4()
-	if err != nil {
-		return err
-	}
+	id := uuid.NewV4()
 
 	_, err = db.Exec(q, id, postID, user.ID)
 	if err != nil {
