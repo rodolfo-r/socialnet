@@ -11,5 +11,5 @@ import (
 func main() {
 	port := os.Getenv("CLIENT_PORT")
 	log.Println("Starting server at: port " + port + "...")
-	log.Fatal(http.ListenAndServe(port, handler.New()))
+	log.Fatal(http.ListenAndServe(":"+port, handler.New()))
 }
