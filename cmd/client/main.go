@@ -3,11 +3,13 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/rodolfo-r/socialnet/pkg/client/handler"
 )
 
 func main() {
-	log.Println("Starting server at: localhost:3000...")
-	log.Fatal(http.ListenAndServe(":3000", handler.New()))
+	port := os.Getenv("CLIENT_PORT")
+	log.Println("Starting server at: port " + port + "...")
+	log.Fatal(http.ListenAndServe(port, handler.New()))
 }

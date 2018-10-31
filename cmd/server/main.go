@@ -14,12 +14,13 @@ import (
 )
 
 func main() {
-	addr := "localhost:3001"
 	dsn := os.Getenv("PG_DSN")
 	sign := os.Getenv("JWT_SIGNATURE")
+	port := os.Getenv("SERVER_PORT")
+	addr := os.Getenv("SERVER_ADDRESS")
 
-	if len(dsn) == 0 || len(sign) == 0 {
-		log.Fatal("PG_DSN, and JWT_SIGNATURE env vars must be set")
+	if len(dsn) == 0 || len(sign) == 0 || len(port) == 0 {
+		log.Fatal("PG_DSN, SERVER_PORT, and JWT_SIGNATURE env vars must be set")
 	}
 
 	postgres.MigrateUp("file://pkg/server/storage/postgres/migrations", dsn)
@@ -34,7 +35,7 @@ func main() {
 		Store: postgres.NewPostStorage(dsn), Like: postgres.NewLikeStorage(dsn), Comment: postgres.NewCommentStorage(dsn),
 	}
 	router := handler.New(usrSvc, postSvc, handler.Options{
-		Log: true, Address: addr, Signature: sign,
+		Log: true, Signature: sign,
 	})
 	log.Println("Starting server at: " + addr)
 	log.Fatal(http.ListenAndServe(addr, router))

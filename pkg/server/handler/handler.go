@@ -11,7 +11,6 @@ import (
 // Options is configuration for the router
 type Options struct {
 	Log       bool
-	Address   string
 	Signature string
 }
 
