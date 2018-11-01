@@ -37,6 +37,6 @@ func main() {
 	router := handler.New(usrSvc, postSvc, handler.Options{
 		Log: true, Signature: sign,
 	})
-	log.Println("Starting server at: " + addr)
-	log.Fatal(http.ListenAndServe(addr, router))
+	log.Println("Starting server at port " + port)
+	log.Fatal(http.ListenAndServe(":"+port, router))
 }

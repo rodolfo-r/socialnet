@@ -1,8 +1,11 @@
 package handler
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
+	"net/http/httputil"
+	"net/url"
 
 	"github.com/gorilla/mux"
 )
@@ -40,6 +43,7 @@ func New(serverAddress string) *Server {
 	}
 
 	server.router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	server.router.PathPrefix("/api/").Handler(http.HandlerFunc(h.proxy))
 
 	for _, r := range rr {
 		server.router.HandleFunc(r.path, r.handler).Methods(r.method)
@@ -84,4 +88,12 @@ func genTemplatePath(filename string, shared bool) string {
 		return "./static/_shared/" + filename + ".html"
 	}
 	return "./static/" + filename + "/" + filename + ".html"
+}
+
+func (h *handler) proxy(w http.ResponseWriter, r *http.Request) {
+	url, err := url.Parse(h.serverAddress)
+	if err != nil {
+		serverError(w, fmt.Errorf("error parsing %s: %s", h.serverAddress, err))
+	}
+	httputil.NewSingleHostReverseProxy(url).ServeHTTP(w, r)
 }
