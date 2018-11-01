@@ -19,17 +19,18 @@ type route struct {
 }
 
 type handler struct {
-	client   *http.Client
-	template *template.Template
+	client        *http.Client
+	template      *template.Template
+	serverAddress string
 }
 
 // New creates a server that responds to http requests.
-func New() *Server {
+func New(serverAddress string) *Server {
 	server := &Server{router: mux.NewRouter()}
 
 	t := template.Must(template.ParseFiles(genTemplatePaths()...))
 
-	h := handler{template: t, client: http.DefaultClient}
+	h := handler{template: t, client: http.DefaultClient, serverAddress: serverAddress}
 	rr := []route{
 		{method: "GET", path: "/", handler: h.Home},
 		{method: "GET", path: "/settings", handler: h.Settings},

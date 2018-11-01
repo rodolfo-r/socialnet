@@ -11,7 +11,7 @@ import (
 // Users responds with a template containing all users
 // in the application.
 func (h *handler) Users(w http.ResponseWriter, r *http.Request) {
-	apiReq, err := http.NewRequest("GET", "http://localhost:3001/users", nil)
+	apiReq, err := http.NewRequest("GET", h.serverAddress+"/users", nil)
 	if err != nil {
 		serverError(w, err)
 		return

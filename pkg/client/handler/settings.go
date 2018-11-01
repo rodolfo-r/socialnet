@@ -10,7 +10,7 @@ import (
 // Settings sends the 'socialnet_token' as an auth
 // token to the api server, and responds with an html template.
 func (h *handler) Settings(w http.ResponseWriter, r *http.Request) {
-	apiReq, err := http.NewRequest("GET", "http://localhost:3001/settings", nil)
+	apiReq, err := http.NewRequest("GET", h.serverAddress+"/settings", nil)
 	if err != nil {
 		serverError(w, err)
 		return

@@ -12,7 +12,7 @@ import (
 // token to the api server, and responds with an html template.
 // responds with a template with the response data.
 func (h *handler) Feed(w http.ResponseWriter, r *http.Request) {
-	apiReq, err := http.NewRequest("GET", "http://localhost:3001/feed", nil)
+	apiReq, err := http.NewRequest("GET", h.serverAddress+"/feed", nil)
 	if err != nil {
 		serverError(w, fmt.Errorf("failed creating GET localhost:3001/feed request: %s", err))
 		return

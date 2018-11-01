@@ -15,7 +15,7 @@ import (
 // responds with a template with the response data.
 func (h *handler) Profile(w http.ResponseWriter, r *http.Request) {
 	username := mux.Vars(r)["username"]
-	apiReq, err := http.NewRequest("GET", "http://localhost:3001/user/"+username, nil)
+	apiReq, err := http.NewRequest("GET", h.serverAddress+"/user/"+username, nil)
 	if err != nil {
 		serverError(w, err)
 		return
