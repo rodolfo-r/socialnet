@@ -1,4 +1,5 @@
 const forms = ['signup', 'login']
+const serverAddress = 'https://socialnet.rodolforg.com/api'
 
 const addClickListener = form => {
   document.querySelector(`#${form} .submit`).addEventListener('click', async () => {
@@ -13,7 +14,7 @@ const addClickListener = form => {
 
     let token
     try {
-      token = await fetch(`http://localhost:3001/${form}`, {
+      token = await fetch(`${serverAddress}/${form}`, {
         method: 'post',
         headers: new Headers({
           'Content-Type': 'Application/json'

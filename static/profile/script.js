@@ -3,6 +3,7 @@ const authToken = getCookie('socialnet_token')
 const postEl = document.querySelector('#new-post')
 const profileUser = document.URL.split('/')[document.URL.split('/').length -1]
 const loggedUser = parseJwt(getCookie('socialnet_token')).usn
+const serverAddress = 'https://socialnet.rodolforg.com/api'
 
 if (loggedUser !== profileUser) {
   followBtn.type = "button"
@@ -35,7 +36,7 @@ function addFollowListener(element) {
     const shouldFollow = element.value.toLowerCase() === "follow"
 
     try {
-      await fetch(`http://localhost:3001/${shouldFollow ? '' : 'un'}follow`, {
+      await fetch(`${serverAddress}/${shouldFollow ? '' : 'un'}follow`, {
         method: 'post',
         headers: new Headers({
           'Content-Type': 'Application/json',
@@ -64,7 +65,7 @@ function addPostListener(newPostEl) {
     formData.append('body', body)
 
     const xhr = new XMLHttpRequest()
-    xhr.open('post', 'http://localhost:3001/submit-post', true)
+    xhr.open('post', serverAddress + '/submit-post', true)
     xhr.setRequestHeader('Authorization', `Bearer ${authToken}`)
     xhr.addEventListener('load', () => {
       window.location.reload()

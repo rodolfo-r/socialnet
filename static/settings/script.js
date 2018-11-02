@@ -1,3 +1,5 @@
+const serverAddress = 'https://socialnet.rodolforg.com/api'
+
 document.querySelector('#change-profile .submit').addEventListener('click', async () => {
   const authToken = getCookie('socialnet_token')
 
@@ -6,7 +8,7 @@ document.querySelector('#change-profile .submit').addEventListener('click', asyn
   formData.append("image", image)
 
   const xhr = new XMLHttpRequest()
-  xhr.open('post', 'http://localhost:3001/profile-picture', true)
+  xhr.open('post', serverAddress + '/profile-picture', true)
   xhr.setRequestHeader('Authorization', `Bearer ${authToken}`)
   xhr.addEventListener('load', () => {
     window.location.reload()

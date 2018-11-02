@@ -1,4 +1,5 @@
 const authToken = getCookie('socialnet_token')
+const serverAddress = 'https://socialnet.rodolforg.com/api'
 
 // Link user's name and image to their profile.
 Array.from(document.querySelectorAll('.post a')).forEach(el => {
@@ -31,7 +32,7 @@ addPostListener(document.querySelector('#tweet-box'))
 function addLikeListener(element, postID) {
   element.addEventListener('click', async () => {
     try {
-      await fetch('http://localhost:3001/like', {
+      await fetch(serverAddress + '/like', {
         method: 'post',
         headers: new Headers({
         'Content-Type': 'Application/json',
@@ -55,7 +56,7 @@ function addCommentListener(buttonEl, inputEl, postID) {
   buttonEl.addEventListener('click', async () => {
   console.log('fired comment listener', inputEl.value)
     try {
-     await fetch('http://localhost:3001/comment', {
+     await fetch(serverAddress + '/comment', {
        method: 'post',
        headers: new Headers({
         'Content-Type': 'Application/json',
@@ -84,7 +85,7 @@ function addPostListener(newPostEl) {
     formData.append('title', title)
 
     const xhr = new XMLHttpRequest()
-    xhr.open('post', 'http://localhost:3001/submit-post', true)
+    xhr.open('post', serverAddress + '/submit-post', true)
     xhr.setRequestHeader('Authorization', `Bearer ${authToken}`)
     xhr.addEventListener('load', () => {
       window.location.reload()
