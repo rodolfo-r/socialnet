@@ -1,5 +1,4 @@
 const authToken = getCookie('socialnet_token')
-const serverAddress = 'https://socialnet.rodolforg.com/api'
 
 // Link user's name and image to their profile.
 Array.from(document.querySelectorAll('.post a')).forEach(el => {

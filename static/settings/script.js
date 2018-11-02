@@ -1,5 +1,3 @@
-const serverAddress = 'https://socialnet.rodolforg.com/api'
-
 document.querySelector('#change-profile .submit').addEventListener('click', async () => {
   const authToken = getCookie('socialnet_token')
 

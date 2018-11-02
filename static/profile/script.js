@@ -3,7 +3,6 @@ const authToken = getCookie('socialnet_token')
 const postEl = document.querySelector('#new-post')
 const profileUser = document.URL.split('/')[document.URL.split('/').length -1]
 const loggedUser = parseJwt(getCookie('socialnet_token')).usn
-const serverAddress = 'https://socialnet.rodolforg.com/api'
 
 if (loggedUser !== profileUser) {
   followBtn.type = "button"
