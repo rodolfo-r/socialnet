@@ -58,8 +58,7 @@ func (h *handler) createPostImage(w http.ResponseWriter, username, postID string
 
 	io.Copy(newFile, file)
 
-	// images will be accessed from the client fileserver.
-	imgURL := "http://localhost:3001/files/user/" + username + "/posts/" + postID + ".jpg"
+	imgURL := h.address + "/files/user/" + username + "/posts/" + postID + ".jpg"
 	newPost := socialnet.Post{ImageURL: imgURL}
 	_, err = h.postSvc.Store.Update(postID, newPost)
 	if err != nil {
