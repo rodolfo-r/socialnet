@@ -1,8 +1,8 @@
 const username = parseJWT(getCookie('socialnet_token')).usn
-const serverAddress = 'https://socialnet.rodolforg.com/api'
+const clientAddress = 'https://socialnet.rodolforg.com'
 
-document.querySelector('#header-profile img').setAttribute('src', serverAddress + `/files/user/${username}/profile.jpg`)
-document.querySelector('#header-profile a').setAttribute('href', serverAddress + `/user/${username}`)
+document.querySelector('#header-profile img').setAttribute('src', clientAddress + `/files/user/${username}/profile.jpg`)
+document.querySelector('#header-profile a').setAttribute('href', clientAddress + `/user/${username}`)
 
 document.querySelector('#logout').addEventListener('click', logout)
 
