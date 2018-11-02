@@ -1,4 +1,5 @@
 const forms = ['signup', 'login']
+const serverAddress = 'https://socialnet.rodolforg.com/api'
 
 const addClickListener = form => {
   document.querySelector(`#${form} .submit`).addEventListener('click', async () => {
