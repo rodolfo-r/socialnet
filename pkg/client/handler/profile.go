@@ -44,6 +44,7 @@ func (h *handler) Profile(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		serverError(w, errors.New(string(b)))
+		return
 	}
 	var prof socialnet.Profile
 	err = json.NewDecoder(res.Body).Decode(&prof)
