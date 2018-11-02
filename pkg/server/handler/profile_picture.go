@@ -46,7 +46,7 @@ func (h *handler) ProfilePicture(w http.ResponseWriter, r *http.Request) {
 	io.Copy(newFile, file)
 
 	// images will be accessed from the client fileserver.
-	imgURL := "http://localhost:3001/files/user/" + username + "/profile.jpg"
+	imgURL := h.address + "/files/user/" + username + "/profile.jpg"
 	_, err = h.userSvc.Store.Update(username, socialnet.User{ImageURL: imgURL})
 	if err != nil {
 		serverError(w, err)

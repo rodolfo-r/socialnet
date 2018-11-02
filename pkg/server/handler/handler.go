@@ -12,6 +12,7 @@ import (
 type Options struct {
 	Log       bool
 	Signature string
+	Address   string
 }
 
 // Server responds to http requests.
@@ -26,6 +27,7 @@ type route struct {
 }
 
 type handler struct {
+	address string
 	userSvc socialnet.UserService
 	postSvc socialnet.PostService
 	r       render.Render
@@ -34,7 +36,7 @@ type handler struct {
 // New creates a router with all handlers
 func New(userSvc socialnet.UserService, postSvc socialnet.PostService, options Options) *Server {
 	server := &Server{mux.NewRouter()}
-	h := handler{userSvc, postSvc, *render.New()}
+	h := handler{options.Address, userSvc, postSvc, *render.New()}
 
 	rr := []route{
 		{method: "POST", path: "/signup", handler: h.SignUp},

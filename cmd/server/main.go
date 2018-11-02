@@ -35,7 +35,7 @@ func main() {
 		Store: postgres.NewPostStorage(dsn), Like: postgres.NewLikeStorage(dsn), Comment: postgres.NewCommentStorage(dsn),
 	}
 	router := handler.New(usrSvc, postSvc, handler.Options{
-		Log: true, Signature: sign,
+		Log: true, Signature: sign, Address: addr,
 	})
 	log.Println("Starting server at port " + port)
 	log.Fatal(http.ListenAndServe(":"+port, router))
