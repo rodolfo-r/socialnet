@@ -43,7 +43,6 @@ func New(serverAddress string) *Server {
 	}
 
 	server.router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-	server.router.PathPrefix("/api/").Handler(http.HandlerFunc(h.proxy))
 
 	for _, r := range rr {
 		server.router.HandleFunc(r.path, r.handler).Methods(r.method)
